@@ -38,24 +38,9 @@ For detailed code examples of time guards, alert dedup, and confirmation pattern
 
 ## Consecutive Error Escalation
 
-When a polling loop encounters repeated failures, escalate from silent logging to active alerting after a threshold. This catches sustained degradation that individual retries mask.
+When a polling loop encounters repeated failures, escalate from silent logging to active alerting after a threshold. This catches sustained degradation that individual retries mask. The threshold prevents alert spam on transient issues while ensuring sustained failures get human attention.
 
-```python
-_CONSECUTIVE_ERROR_ALERT_THRESHOLD = 10
-consecutive_errors = 0
-
-while running:
-    try:
-        result = await check()
-        consecutive_errors = 0  # reset on success
-    except Exception as e:
-        consecutive_errors += 1
-        logger.warning(f"Error #{consecutive_errors}: {e}")
-        if consecutive_errors == _CONSECUTIVE_ERROR_ALERT_THRESHOLD:
-            await alert(f"Loop failing repeatedly: {consecutive_errors} consecutive errors")
-```
-
-The threshold prevents alert spam on transient issues while ensuring sustained failures get human attention.
+For code examples, see `references/code-examples.md`.
 
 ## Common Mistakes
 

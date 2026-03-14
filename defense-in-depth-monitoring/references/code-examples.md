@@ -45,6 +45,25 @@ if tp_order_missing and not self._tp_missing_alerted:
 
 Reset the flag when the issue resolves.
 
+## Consecutive Error Escalation
+
+When a polling loop fails repeatedly, escalate from logging to alerting after a threshold. Reset the counter on any success.
+
+```python
+_CONSECUTIVE_ERROR_ALERT_THRESHOLD = 10
+consecutive_errors = 0
+
+while running:
+    try:
+        result = await check()
+        consecutive_errors = 0  # reset on success
+    except Exception as e:
+        consecutive_errors += 1
+        logger.warning(f"Error #{consecutive_errors}: {e}")
+        if consecutive_errors == _CONSECUTIVE_ERROR_ALERT_THRESHOLD:
+            await alert(f"Loop failing repeatedly: {consecutive_errors} consecutive errors")
+```
+
 ## Confirmation Before Acting on Disappearances
 
 When something disappears from an external system (order gone, position gone), wait and re-check before acting. API glitches can return empty results temporarily.
