@@ -101,6 +101,16 @@ Symlink any new skills so they are immediately active:
 # No symlink needed — skills repo is cloned directly at ~/.claude/skills/
 ```
 
+## Skill Count Limit
+
+Before creating a new skill, check the current count:
+
+```bash
+ls -d ~/.claude/skills/*/  | wc -l
+```
+
+If the count reaches 40, stop and notify the user. Do not create the new skill. Instead, ask the user how they would like to proceed — options include consolidating related skills, removing unused ones, or accepting the higher token cost.
+
 ## What to Extract vs What to Skip
 
 Extract:
