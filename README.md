@@ -41,6 +41,7 @@ ln -s ~/claude-code-skills/* ~/.claude/skills/
 | vps-deployment-checklist | systemd, rsync, venv activation, lock files, heartbeats |
 | order-management-edge-cases | Partial fills, cancel races, resize windows, size calculations |
 | property-based-testing | Hypothesis-based fuzz testing with invariant checking |
+| project-history-documentation | Creates and maintains a PROJECT_HISTORY.md technical build reference |
 
 ## Origin
 
