@@ -74,10 +74,21 @@ SKILL.md body:
 - Include common mistakes section
 - Move heavy reference to references/ folder
 
-### Step 5: Quality Check
+### Step 5: Quality Gate
+
+Every candidate rule must pass all three tests before it can be committed. If it fails any test, rewrite it or discard it.
+
+1. Can I give a concrete code example? If not, the rule is too vague. Rewrite with a specific before/after pattern, or discard.
+
+2. Does it say what TO DO, not just what to avoid? "Don't use floats for money" is incomplete. "Use Decimal for money, not float" is actionable. If the rule only says what not to do, add what to do instead.
+
+3. Would a developer who reads this actually change their behavior? If the answer is "they would have done this anyway," the rule is obvious and not worth adding. Skip it.
+
+### Step 6: Quality Check
 
 Before committing, verify each new or updated skill:
 
+- [ ] Every rule passed the quality gate (all 3 tests)
 - [ ] Checked all existing skills for overlap first
 - [ ] No duplicate rules across skills
 - [ ] Description includes trigger phrases and negative triggers
@@ -87,18 +98,28 @@ Before committing, verify each new or updated skill:
 - [ ] If over 500 words, heavy content moved to references/
 - [ ] Update README.md in skills repo with any new skills
 
-### Step 6: Commit, Push, and Symlink
+### Step 7: Log the Extraction
+
+Append to ~/.claude/skills/extraction-log.md with what was considered and what was decided. This creates a searchable history across all projects.
+
+Format:
+```markdown
+## [Project Name], v[Version] ([Date])
+- ADDED to [skill-name]: "[rule summary]"
+- UPDATED [skill-name]: "[what changed]"
+- SKIPPED: "[lesson]" — [reason: already covered by X / too vague / too obvious]
+- NEW SKILL: [skill-name] — "[why no existing skill fit]"
+```
+
+If the same lesson gets SKIPPED 3+ times across different projects, flag it. Either the existing skill's rule is not clear enough, or it needs to be rewritten.
+
+### Step 8: Commit and Push
 
 ```bash
 cd ~/.claude/skills
 git add -A
 git commit -m "Add/update skills from [project name] v[version] lessons"
 git push
-```
-
-Symlink any new skills so they are immediately active:
-```bash
-# No symlink needed — skills repo is cloned directly at ~/.claude/skills/
 ```
 
 ## Skill Count Limit
