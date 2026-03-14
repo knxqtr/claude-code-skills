@@ -45,4 +45,4 @@ ln -s ~/claude-code-skills/* ~/.claude/skills/
 
 ## Origin
 
-These patterns were extracted from building a production automated trading bot (3 days, zero to live, 1463 tests, 32 bugs cataloged with root causes). Every rule in these skills exists because ignoring it caused a real bug.
+These patterns were extracted from building production systems with real users and real consequences. Every rule exists because ignoring it caused a real bug — 32 bugs cataloged with root causes across 1,463 tests.
