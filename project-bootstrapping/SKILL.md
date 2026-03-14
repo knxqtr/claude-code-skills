@@ -16,62 +16,17 @@ disable-model-invocation: true
 
 Do these in order. Each step depends on the previous one.
 
-### 1. Create folder and git repo
-```bash
-mkdir my-project && cd my-project
-git init
-```
-
-### 2. Create virtual environment
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-### 3. Create .gitignore (before first commit)
-```
-venv/
-.env
-__pycache__/
-*.pyc
-.DS_Store
-*.log
-data/
-```
-
-### 4. Create .env for secrets
-```
-API_KEY=xxx
-BOT_TOKEN=xxx
-```
-Load with `python-dotenv`. Never commit this file.
-
-### 5. Create config.py
-Centralize all constants and settings in one file. Do not scatter magic numbers through the codebase.
-
-```python
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-
-API_KEY = os.getenv("API_KEY")
-POSITION_SIZE = 200
-MAX_RETRIES = 3
-```
-
-### 6. Create a tracking document
-A PROGRESS.md or similar file that tracks what is done and what is left. Update it as you build. This is your north star when things get complex.
-
-### 7. First commit
-```bash
-git add .gitignore config.py PROGRESS.md
-git commit -m "Initial project setup"
-```
+1. Create folder and git repo
+2. Create virtual environment
+3. Create .gitignore (before first commit) -- include venv/, .env, __pycache__/, *.pyc, .DS_Store, *.log, data/
+4. Create .env for secrets -- load with python-dotenv, never commit this file
+5. Create config.py -- centralize all constants and settings in one file, do not scatter magic numbers
+6. Create a tracking document (PROGRESS.md) -- tracks what is done and what is left
+7. First commit -- add .gitignore, config.py, PROGRESS.md
 
 ## Build Order for Services/Bots
 
-Build in dependency order — each layer only depends on layers above it:
+Build in dependency order -- each layer only depends on layers above it:
 
 ```
 1. config.py          -- all settings centralized
@@ -84,13 +39,6 @@ Build in dependency order — each layer only depends on layers above it:
 ```
 
 ## Testing from Day One
-
-```python
-# conftest.py — redirect all file I/O to temp directories
-@pytest.fixture(autouse=True)
-def isolate_io(tmp_path, monkeypatch):
-    monkeypatch.setattr(module, "DATA_PATH", str(tmp_path / "data.json"))
-```
 
 - Isolate test I/O from production data using tmp_path
 - Start with happy-path tests, add edge cases as you find real bugs
@@ -122,3 +70,5 @@ For small projects (under 10 files), flat structure is fine. Do not over-organiz
 - Scattering config values across multiple files. When a value needs changing, you hunt for it everywhere.
 - No .gitignore before first commit. Secrets or venv end up in git history permanently.
 - Over-engineering folder structure for a 3-file project. Start flat, split when a file gets hard to navigate.
+
+For setup commands and config code, see `references/setup-commands.md`.

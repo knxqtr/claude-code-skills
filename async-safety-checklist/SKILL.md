@@ -19,93 +19,27 @@ Run through this list for every async project:
 
 ### 1. Shared Mutable State Needs a Lock
 
-Any data touched by more than one task needs an asyncio.Lock(). This includes file I/O.
-
-```python
-# The classic read-modify-write race:
-# Task A reads file → Task B reads file (stale) →
-# Task A writes → Task B writes (clobbers A's changes)
-
-_lock = asyncio.Lock()
-
-async def save_state(key, value):
-    async with _lock:
-        data = read_json(path)     # read
-        data[key] = value          # modify
-        write_json(path, data)     # write
-```
-
-Use per-resource locks when resources are independent. A single global lock makes independent operations wait for each other unnecessarily.
+Any data touched by more than one task needs an asyncio.Lock(). This includes file I/O (the classic read-modify-write race). Use per-resource locks when resources are independent -- a single global lock makes independent operations wait unnecessarily.
 
 ### 2. Never Cancel a Task From Inside Itself
 
-If Task A detects an event and calls a handler, and that handler cancels Task A, the code after the handler call never executes.
-
-```python
-# BAD: monitor detects event → calls handler → handler cancels monitor
-#      → notification code after handler call never runs
-
-# GOOD: monitor sets a flag, separate handler loop processes it
-```
-
-Decouple detection from handling. The detector sets a flag or puts an item on a queue. A separate consumer processes it.
+If Task A detects an event and calls a handler that cancels Task A, the code after the handler call never executes. Decouple detection from handling: the detector sets a flag or enqueues an item, a separate consumer processes it.
 
 ### 3. Atomic Lock Files
 
-Prevent duplicate instances with atomic file creation:
-
-```python
-# BAD: TOCTOU race (two processes can pass the check simultaneously)
-if not os.path.exists(lock_file):
-    open(lock_file, 'w').write(pid)
-
-# GOOD: atomic create-or-fail
-fd = os.open(lock_file, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
-os.write(fd, str(os.getpid()).encode())
-os.close(fd)
-```
+Prevent duplicate instances with atomic file creation using O_CREAT | O_EXCL. Never use exists() + create() -- that is a TOCTOU race where two processes can pass the check simultaneously.
 
 ### 4. Sequential Processing for Order-Dependent Operations
 
-If two operations can race and produce an incorrect combined result, process them sequentially.
-
-```python
-# BAD: two signals arrive simultaneously, both read leverage as 3x,
-#      both place trades, combined leverage exceeds 4x limit
-
-# GOOD: process signals through a queue, one at a time
-_signal_queue = asyncio.Queue()
-
-async def signal_processor():
-    while True:
-        signal = await _signal_queue.get()
-        await process_signal(signal)  # checks leverage with current state
-```
+If two operations can race and produce an incorrect combined result, process them through an asyncio.Queue one at a time. This prevents scenarios like two signals both reading stale state and exceeding limits.
 
 ### 5. Strict Shutdown Ordering
 
-Things that produce messages stop before things that send messages.
-
-```
-1. Stop monitors/workers      -- may send final notifications
-2. Stop schedulers            -- heartbeat, summaries
-3. Stop communication channel -- disconnect last
-```
-
-If you cancel in arbitrary order, a monitor may try to send a notification through an already-closed channel.
+Stop things in dependency order: producers first (monitors/workers), then schedulers, then communication channels last. If you cancel in arbitrary order, a monitor may try to send through an already-closed channel.
 
 ### 6. Never Globally Mock Timing Primitives
 
-In tests, do not replace asyncio.sleep globally. Background loops that call sleep in a tight loop will spin at infinite speed, consuming 100% CPU and crashing.
-
-```python
-# BAD: global autouse fixture that replaces asyncio.sleep with instant no-op
-# Result: background loops run millions of iterations per second
-
-# GOOD: patch sleep only in the specific function being tested
-with patch.object(my_module, 'asyncio.sleep', return_value=None):
-    await test_specific_function()
-```
+In tests, do not replace asyncio.sleep globally. Background loops will spin at infinite speed and crash. Patch sleep only in the specific function being tested.
 
 ## Common Mistakes
 
@@ -113,3 +47,5 @@ with patch.object(my_module, 'asyncio.sleep', return_value=None):
 - Using exists() + create() instead of atomic O_CREAT | O_EXCL for lock files.
 - Cancelling tasks in arbitrary order during shutdown, causing ConnectionError or AttributeError.
 - Using a single global lock when per-resource locks would allow independent operations to run concurrently.
+
+For detailed code examples, see `references/code-examples.md`.

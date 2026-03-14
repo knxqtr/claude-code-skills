@@ -18,97 +18,13 @@ Mocks must reproduce error behavior, not just success behavior. A lenient mock g
 
 ## Rules
 
-### 1. Error Behavior Must Match Production
+1. Error behavior must match production. If production raises on invalid input, the mock must raise too.
+2. Cross-cutting concerns must cover ALL methods. When adding a failure mode (network sim, rate limiting) to a mock, audit every public method. Missing one creates a hole where tests pass but production fails.
+3. Partial operations are not full operations. If the real system can partially complete (partial fill, partial delete), the mock must model this. "Reduce by X" and "remove entirely" are fundamentally different.
+4. Never globally mock timing primitives. Replacing asyncio.sleep globally makes background loops spin at infinite speed, causing 100% CPU and crashes. Scope patches to specific functions.
+5. Deduplicate test utilities early. When 3+ test files share the same mock class, extract to a shared helper immediately. Duplicated mocks drift apart over time.
 
-```python
-# BAD: mock silently accepts invalid input
-class FakeBroker:
-    async def place_order(self, size):
-        return {"status": "ok", "size": size or 1.0}  # defaults to 1.0!
-
-# GOOD: mock raises like production would
-class FakeBroker:
-    async def place_order(self, size):
-        if size is None or size <= 0:
-            raise ValueError("Invalid order size")
-        return {"status": "ok", "size": size}
-```
-
-### 2. Cross-Cutting Concerns Must Cover ALL Methods
-
-When adding a failure mode (network simulation, rate limiting, auth checks) to a mock, audit EVERY public method. Missing even one creates a hole where tests pass but production fails.
-
-```python
-# BAD: added _check_fail() to place_order and get_position,
-#      but forgot get_open_orders and get_account_value
-#      Result: those methods succeed during simulated outage
-
-# GOOD: add to every public method
-class FakeExchange:
-    def _check_fail(self):
-        if self._should_fail:
-            raise ConnectionError("Exchange unreachable")
-
-    async def place_order(self, ...):
-        self._check_fail()  # present
-        ...
-
-    async def get_position(self, ...):
-        self._check_fail()  # present
-        ...
-
-    async def get_open_orders(self, ...):
-        self._check_fail()  # present -- don't forget this one
-        ...
-
-    async def get_account_value(self):
-        self._check_fail()  # present -- or this one
-        ...
-```
-
-### 3. Partial Operations Are Not Full Operations
-
-If the real system can partially complete an operation (partial fill, partial delete, partial write), the mock must model this correctly.
-
-```python
-# BAD: TP1 fill removes entire position
-def handle_tp_fill(self, order):
-    del self.positions[order.coin]  # gone entirely
-
-# GOOD: reduce position by filled amount
-def handle_tp_fill(self, order):
-    pos = self.positions[order.coin]
-    pos.size -= order.filled_size
-    if pos.size <= 0:
-        del self.positions[order.coin]
-```
-
-"Reduce by X" and "remove entirely" are fundamentally different operations.
-
-### 4. Never Globally Mock Timing Primitives
-
-Replacing asyncio.sleep or time.sleep globally makes background loops spin at infinite speed.
-
-```python
-# BAD: global fixture replaces sleep for all tests
-@pytest.fixture(autouse=True)
-def fast_sleep():
-    with patch('asyncio.sleep', return_value=None):
-        yield
-# Result: any background loop runs millions of iterations, 100% CPU, crash
-
-# GOOD: scope patches to specific functions, not global background loops
-```
-
-### 5. Deduplicate Test Utilities Early
-
-When 3 or more test files share the same mock class, extract it to a shared helper immediately. Duplicated mocks drift apart over time, creating inconsistent test behavior.
-
-```python
-# Before: 23 files with identical FakeMonitor class (400 lines duplicated)
-# After: single tests/helpers.py, imported everywhere
-from tests.helpers import FakeMonitor, patch_start_monitor
-```
+For detailed before/after code examples of each rule, see `references/code-examples.md`.
 
 ## Checklist
 

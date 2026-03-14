@@ -7,60 +7,27 @@ description: Maintains PROJECT_HISTORY.md with bug catalog, decisions, and lesso
 
 ## When to Use
 
-- Starting a new project (create the initial document)
-- After fixing a bug with a non-obvious root cause (add to bug catalog)
-- After making a decision where alternatives were considered (add to decision rationale)
-- After a version release (update version history and lessons learned)
-- After architecture changes (update architecture and startup/shutdown sections)
+- Starting a new project (create initial document)
+- After fixing a bug with a non-obvious root cause
+- After making a decision where alternatives were considered
+- After a version release or architecture change
 
-Do NOT use for: API docs, user guides, or README files. This is a technical build reference.
+Do NOT use for: API docs, user guides, or README files.
 
 ## Automatic Documentation Rules
 
-This document is maintained continuously, not written after the fact. Follow these rules during active development:
-
 ### After Every Non-Trivial Bug Fix
-
-If the root cause was not immediately obvious, add a bug catalog entry:
-
-```
-**[ID]: [Short descriptive name]**
-Trigger:  [What causes it]
-Symptom:  [What the user or developer sees]
-Root:     [The actual underlying cause]
-Fix:      [What was changed]
-Commit:   [Reference]
-Pattern:  [Generalizable lesson, if any]
-```
-
-Skip trivial bugs (typos, missing imports, copy-paste errors). Document bugs where the root cause required investigation or where the same mistake could happen in another project.
+Add a bug catalog entry if the root cause was not immediately obvious. Skip trivial bugs (typos, missing imports, copy-paste errors).
 
 ### After Every Non-Obvious Technical Decision
-
-If you considered alternatives before choosing, add a decision rationale entry:
-
-```
-| Decision | Choice | Why |
-|----------|--------|-----|
-```
-
-Skip obvious decisions. Document decisions where the wrong choice would have caused real problems.
+Add a decision rationale entry if you considered alternatives before choosing.
 
 ### After Every Version Bump
-
 Update the version history table and review lessons learned for new entries.
-
-## Why This Document Exists
-
-A project history answers questions that code and git history cannot:
-- WHY was this decision made? (code shows what, not why)
-- What was the root cause of that bug? (git log shows the fix, not the investigation)
-- What order should things be built in? (git history is chronological, not logical)
-- What lessons transfer to the next project? (buried in commits and conversations)
 
 ## Sections
 
-Create a file called PROJECT_HISTORY.md. Start with sections 1-4 on project creation. Add remaining sections as the project grows.
+Create PROJECT_HISTORY.md with sections 1-4 at project start. Add others as needed.
 
 | # | Section | When to create | When to update |
 |---|---------|---------------|----------------|
@@ -86,29 +53,14 @@ Consult `references/section-templates.md` for exact templates and formatting for
 - Add a "Pattern" line when the bug teaches something reusable beyond this project
 - Include embarrassing bugs. Those are often the most valuable.
 
-## Writing Guidelines
-
-1. Write for someone who was not in the room.
-2. Code examples: short (under 20 lines), comments explain WHY not WHAT.
-3. Tables for structured data. Prose for context and reasoning.
-4. Do not duplicate git log. Focus on WHY and LESSONS, not chronological play-by-play.
-
 ## Quality Checklist
 
-Before marking the document as complete at a milestone, verify:
+- [ ] Every bug entry has a root cause, not just a fix
+- [ ] Decision rationale includes rejected alternatives and why
+- [ ] Implementation sequence reflects build order, not alphabetical
+- [ ] Code examples under 20 lines with WHY comments
+- [ ] No project secrets (API keys, IPs, passwords)
+- [ ] Lessons written as transferable principles
+- [ ] Understandable without follow-up questions
 
-- [ ] Every bug entry has a root cause, not just a fix description
-- [ ] Decision rationale includes alternatives that were rejected and why
-- [ ] Implementation sequence reflects build order, not alphabetical order
-- [ ] Code examples are under 20 lines and include WHY comments
-- [ ] No project secrets (API keys, IPs, passwords) appear anywhere
-- [ ] Lessons learned are written as transferable principles, not project-specific notes
-- [ ] Someone unfamiliar with the project could understand every section without follow-up questions
-
-## Common Mistakes
-
-- Writing a narrative diary instead of a reference document. This is not "what happened on Tuesday."
-- Omitting the root cause from bug entries. The fix is in the code. The value is understanding WHY.
-- Only documenting happy paths. The bug catalog and decision rationale are the most valuable sections.
-- Documenting every trivial bug. Only catalog bugs where the root cause was non-obvious or the lesson is transferable.
-- Waiting until the end to document. Update continuously during development.
+For writing guidelines and common mistakes, see `references/writing-guidelines.md`.
