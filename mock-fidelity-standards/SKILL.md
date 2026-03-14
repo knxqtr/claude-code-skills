@@ -1,6 +1,6 @@
 ---
 name: mock-fidelity-standards
-description: Standards for writing test mocks that reproduce real error behavior, not just happy paths. Use when writing mocks, fakes, stubs, or test simulators. Use when user says "mock", "fake", "stub", "test double", "simulator", "test harness", or "test isolation".
+description: Test mock quality standards. Use when writing mocks, fakes, or simulators to ensure they reproduce real error behavior.
 ---
 
 # Mock Fidelity Standards

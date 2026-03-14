@@ -1,6 +1,7 @@
 ---
 name: skill-extraction
-description: Extracts reusable Claude Code skills from a project's history, bug catalog, and lessons learned. Runs automatically after version bumps. Checks existing skills before creating new ones. Use when a version is released, user says "extract skills" or "update skills", or after PROJECT_HISTORY.md has significant new entries. Do NOT use during active development — wait until a version milestone.
+description: Extracts reusable skills from project history. Use at version bumps or when asked to update skills.
+disable-model-invocation: true
 ---
 
 # Skill Extraction
@@ -55,24 +56,31 @@ For each unmatched bug, lesson, or decision, ask:
 
 ### Step 4: Write or Update Skills
 
+Priority order for where to put new knowledge:
+
+1. Add to an existing skill's SKILL.md (if the skill is under 500 words)
+2. Add to an existing skill's references/ file (if SKILL.md is already long)
+3. Create a new references/ file in an existing skill (if no reference file fits)
+4. Create a new skill (last resort — only if no existing skill covers this category)
+
 For updates to existing skills:
 - Add the new rule or example in the appropriate section
+- If SKILL.md exceeds 500 words after the addition, move detailed content to references/
 - Do not duplicate existing content
-- Update the description if new trigger phrases are needed
-- Keep the skill under its word limit
+- Keep descriptions under 130 characters
 
-For new skills, follow Anthropic's guide:
+For new skills (last resort), follow Anthropic's guide:
 
 Frontmatter:
 - name: kebab-case only, matches folder name
-- description: [What it does] + [When to use it] + [Trigger phrases] + [Negative triggers]
-- Under 1024 characters, no XML angle brackets
+- description: under 130 characters, [What it does] + [When to use it]
+- Under 1024 characters total, no XML angle brackets
 
 SKILL.md body:
-- Under 500 words for frequently-triggered skills
+- Under 500 words
 - Specific and actionable instructions, not vague guidance
 - Include common mistakes section
-- Move heavy reference to references/ folder
+- Heavy reference material goes in references/ folder
 
 ### Step 5: Quality Gate
 

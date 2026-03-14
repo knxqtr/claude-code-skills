@@ -1,6 +1,6 @@
 ---
 name: silent-failure-prevention
-description: Patterns to ensure every user action gets visible feedback and critical operations have real fallbacks. Use when building user-facing services, bots, APIs, or any system where a failure could go unnoticed. Use when user says "notify on error", "user feedback", "fallback", "what if it fails silently", or "dead man's switch".
+description: Ensure user actions get visible feedback and critical operations have real fallbacks. Use when failures could go unnoticed.
 ---
 
 # Silent Failure Prevention

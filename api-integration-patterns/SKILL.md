@@ -1,6 +1,6 @@
 ---
 name: api-integration-patterns
-description: Patterns for reliable external API integration — retries, caching, fuzzy matching, and error handling. Use when connecting to third-party APIs, exchanges, payment providers, or external services. Use when user says "API", "integration", "retry", "rate limit", "caching", or "external service".
+description: Reliable API integration patterns. Use when connecting to external APIs, handling retries, caching, or rate limits.
 ---
 
 # API Integration Patterns

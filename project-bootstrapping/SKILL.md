@@ -1,6 +1,7 @@
 ---
 name: project-bootstrapping
-description: Python project setup from scratch — folder structure, config, venv, git, testing, and tracking docs. Use when starting a new Python project or bot from zero. Use when user says "new project", "start from scratch", "set up project", "project structure", or "bootstrap".
+description: Python project setup from scratch. Use when starting a new project — structure, config, venv, git, testing.
+disable-model-invocation: true
 ---
 
 # Project Bootstrapping

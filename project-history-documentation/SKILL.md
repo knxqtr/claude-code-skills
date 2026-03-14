@@ -1,6 +1,6 @@
 ---
 name: project-history-documentation
-description: Creates and maintains a PROJECT_HISTORY.md technical build reference for any project. Automatically updates bug catalog, decision rationale, and lessons learned during development. Use when starting a new project, fixing a bug with a non-obvious root cause, making a technical decision between alternatives, or reaching a version milestone. Do NOT use for README files, API docs, or user guides.
+description: Maintains PROJECT_HISTORY.md with bug catalog, decisions, and lessons. Use when documenting bugs, decisions, or milestones. Not for READMEs or API docs.
 ---
 
 # Project History Documentation

@@ -1,6 +1,6 @@
 ---
 name: defense-in-depth-monitoring
-description: Multi-layer event detection patterns for time-sensitive monitoring. Use when building health checks, alert systems, price monitors, or any system where missing an event has consequences. Use when user says "health check", "monitoring", "polling", "detect event", "alert system", or "missed event".
+description: Multi-layer event detection for reliable monitoring. Use when building health checks, alerts, or any system where missing an event has consequences.
 ---
 
 # Defense in Depth Monitoring

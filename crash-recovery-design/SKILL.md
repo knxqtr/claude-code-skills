@@ -1,6 +1,6 @@
 ---
 name: crash-recovery-design
-description: State persistence and crash recovery patterns for long-running services. Use when building bots, daemons, or any service that must survive restarts without losing track of active work. Use when user says "recovery", "restart", "persist state", "crash safe", or "what happens if it dies".
+description: Crash recovery and state persistence. Use when building services that must survive restarts without losing active work.
 ---
 
 # Crash Recovery Design
