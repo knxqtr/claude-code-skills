@@ -36,6 +36,27 @@ When Layer 1 fires, cancel the next Layer 2 check to avoid duplicate processing.
 
 For detailed code examples of time guards, alert dedup, and confirmation patterns, see `references/code-examples.md`.
 
+## Consecutive Error Escalation
+
+When a polling loop encounters repeated failures, escalate from silent logging to active alerting after a threshold. This catches sustained degradation that individual retries mask.
+
+```python
+_CONSECUTIVE_ERROR_ALERT_THRESHOLD = 10
+consecutive_errors = 0
+
+while running:
+    try:
+        result = await check()
+        consecutive_errors = 0  # reset on success
+    except Exception as e:
+        consecutive_errors += 1
+        logger.warning(f"Error #{consecutive_errors}: {e}")
+        if consecutive_errors == _CONSECUTIVE_ERROR_ALERT_THRESHOLD:
+            await alert(f"Loop failing repeatedly: {consecutive_errors} consecutive errors")
+```
+
+The threshold prevents alert spam on transient issues while ensuring sustained failures get human attention.
+
 ## Common Mistakes
 
 - Single-layer detection: one polling loop that can miss events if timing is unlucky.

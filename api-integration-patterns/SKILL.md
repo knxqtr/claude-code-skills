@@ -94,6 +94,28 @@ async def _retry(fn, *args, max_retries=3, **kwargs):
     raise RetryExhaustedError(f"Failed after {max_retries} attempts")
 ```
 
+### 7. Use SDK Exceptions, Not Raw HTTP Errors
+
+When an SDK provides its own exception hierarchy, catch those instead of raw HTTPError. SDK exceptions carry structured data (status codes, error messages) and survive SDK upgrades better.
+
+```python
+# Bad: catches raw HTTP, breaks if SDK changes transport
+except requests.exceptions.HTTPError as e:
+    if e.response.status_code == 429: ...
+
+# Good: catches SDK-provided exceptions
+from sdk.errors import ClientError, ServerError
+
+except ClientError as e:
+    if e.status_code == 429:  # rate limit — retryable with backoff
+        delay = base_delay * (2 ** attempt)
+        await asyncio.sleep(delay)
+    else:  # other 4xx — not retryable
+        raise
+except ServerError:  # 5xx — transient, retry
+    await asyncio.sleep(base_delay)
+```
+
 ## Common Mistakes
 
 - Calling get_price() every second when a 2-second cache would cut API calls in half.
