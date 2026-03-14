@@ -42,6 +42,7 @@ ln -s ~/claude-code-skills/* ~/.claude/skills/
 | order-management-edge-cases | Partial fills, cancel races, resize windows, size calculations |
 | property-based-testing | Hypothesis-based fuzz testing with invariant checking |
 | project-history-documentation | Creates and maintains a PROJECT_HISTORY.md technical build reference |
+| skill-extraction | Extracts reusable skills from project history, bug catalogs, and lessons learned |
 
 ## Origin
 
