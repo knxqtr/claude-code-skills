@@ -90,7 +90,7 @@ Before committing, verify each new or updated skill:
 ### Step 6: Commit, Push, and Symlink
 
 ```bash
-cd ~/claude-code-skills
+cd ~/.claude/skills
 git add -A
 git commit -m "Add/update skills from [project name] v[version] lessons"
 git push
@@ -98,7 +98,7 @@ git push
 
 Symlink any new skills so they are immediately active:
 ```bash
-ln -s ~/claude-code-skills/new-skill-name/ ~/.claude/skills/new-skill-name
+# No symlink needed — skills repo is cloned directly at ~/.claude/skills/
 ```
 
 ## What to Extract vs What to Skip
