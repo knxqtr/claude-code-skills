@@ -1,6 +1,7 @@
 ---
 name: project-history-documentation
-description: Maintains PROJECT_HISTORY.md with bug catalog, decisions, and lessons. Use when documenting bugs, decisions, or milestones. Not for READMEs or API docs.
+description: Maintains PROJECT_HISTORY.md with structured bug catalog, decision rationale, and lessons learned. Use when documenting bugs, technical decisions, version milestones, or architecture changes. Covers automatic documentation rules during development. Not for READMEs, API docs, or user guides.
+disable-model-invocation: true
 ---
 
 # Project History Documentation

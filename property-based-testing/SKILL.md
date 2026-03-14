@@ -1,6 +1,6 @@
 ---
 name: property-based-testing
-description: Property-based fuzz testing with Hypothesis. Use when testing stateful systems or when hand-written tests miss edge cases.
+description: Property-based fuzz testing with Hypothesis for stateful systems. Use when hand-written tests miss edge cases, testing event-driven architectures, or verifying invariants across random event sequences. Covers event generation, invariant design, and simulated clocks. Use when user says "fuzz test", "random testing", "find edge cases", or "state machine testing".
 ---
 
 # Property-Based Testing

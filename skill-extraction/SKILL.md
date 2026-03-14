@@ -1,6 +1,6 @@
 ---
 name: skill-extraction
-description: Extracts reusable skills from project history. Use at version bumps or when asked to update skills.
+description: Extracts reusable skills from PROJECT_HISTORY.md bug catalog, lessons, and decisions. Use at version bumps or when asked to update, create, or review skills. Covers the 8-step extraction process, quality gate, and skill count limits.
 disable-model-invocation: true
 ---
 

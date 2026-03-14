@@ -1,6 +1,6 @@
 ---
 name: mock-fidelity-standards
-description: Test mock quality standards. Use when writing mocks, fakes, or simulators to ensure they reproduce real error behavior.
+description: Test mock quality standards ensuring mocks reproduce real error behavior. Use when writing mocks, fakes, stubs, or test simulators. Covers error fidelity, cross-cutting failure modes, partial operations, and timing mock safety. Use when user says "tests pass but production fails", "mock too lenient", or "flaky tests".
 ---
 
 # Mock Fidelity Standards

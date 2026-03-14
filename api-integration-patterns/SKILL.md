@@ -1,6 +1,6 @@
 ---
 name: api-integration-patterns
-description: Reliable API integration patterns. Use when connecting to external APIs, handling retries, caching, or rate limits.
+description: Reliable API integration patterns including retries, caching, rate limits, and identifier mapping. Use when connecting to external APIs, handling 429 errors, reducing redundant calls, or mapping asset/entity names between systems. Not for internal function calls.
 ---
 
 # API Integration Patterns

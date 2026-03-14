@@ -1,6 +1,6 @@
 ---
 name: defense-in-depth-monitoring
-description: Multi-layer event detection for reliable monitoring. Use when building health checks, alerts, or any system where missing an event has consequences.
+description: Multi-layer event detection for reliable monitoring using the three-layer pattern (precise timer, polling, safety net). Use when building health checks, alerts, price triggers, or any system where missing an event has consequences. Covers alert deduplication, time guards, and confirmation before acting on disappearances. Use when user says "missed an event", "duplicate alerts", or "false trigger".
 ---
 
 # Defense in Depth Monitoring

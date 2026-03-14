@@ -1,6 +1,6 @@
 ---
 name: silent-failure-prevention
-description: Ensure user actions get visible feedback and critical operations have real fallbacks. Use when failures could go unnoticed.
+description: Ensure user actions get visible feedback and critical operations have real fallbacks. Use when building notification systems, error handling, or any operation where failure could go unnoticed. Covers the dead man's switch pattern and emergency priority. Use when user says "no error message", "failed silently", "didn't know it broke", or "needs a fallback".
 ---
 
 # Silent Failure Prevention

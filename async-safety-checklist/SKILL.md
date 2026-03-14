@@ -1,6 +1,6 @@
 ---
 name: async-safety-checklist
-description: Async safety and race condition prevention. Use when writing asyncio code with shared state, background tasks, or shutdown handlers.
+description: Async safety and race condition prevention for Python asyncio. Use when writing code with shared state, background tasks, shutdown handlers, or lock files. Covers asyncio.Lock patterns, atomic file creation, sequential queues, and shutdown ordering. Use when user says "race condition", "data corruption", "two tasks writing same file", or "graceful shutdown".
 ---
 
 # Async Safety Checklist

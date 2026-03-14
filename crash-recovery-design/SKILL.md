@@ -1,6 +1,6 @@
 ---
 name: crash-recovery-design
-description: Crash recovery and state persistence. Use when building services that must survive restarts without losing active work.
+description: Crash recovery and state persistence for long-running services. Use when building bots, daemons, or workers that must survive restarts without losing active work. Covers startup/shutdown ordering, state file design, and detecting events missed while offline. Use when user says "loses state", "forgets after restart", or "what if it crashes".
 ---
 
 # Crash Recovery Design

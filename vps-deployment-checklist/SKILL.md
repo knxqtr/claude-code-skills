@@ -1,6 +1,6 @@
 ---
 name: vps-deployment-checklist
-description: VPS deployment checklist for Python services. Use when deploying to a server with systemd, rsync, or remote setup.
+description: VPS deployment checklist for Python services including systemd, rsync, and remote setup. Use when deploying a bot or service to a Linux server, setting up auto-restart, or debugging why a service fails on the server but works locally. Covers run scripts, venv portability, lock files, and heartbeats.
 ---
 
 # VPS Deployment Checklist
