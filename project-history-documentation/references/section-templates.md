@@ -136,3 +136,22 @@ Key patterns:
 ```
 
 Good lessons learned are ones someone building a completely different project could benefit from.
+
+---
+
+## Corrections Log Entry
+
+```markdown
+### Category: [Instruction Gap / Conflicting Rules / Repeated Mistake / Missing Context]
+
+**[CL-N]: [Short descriptive name]**
+Trigger:    [What the user asked or what Claude did wrong]
+Expected:   [What should have happened]
+Root cause: [Why -- rule too vague, buried in long file, conflicting instructions, missing rule, etc.]
+Prevention: [What was changed to stop it recurring -- updated CLAUDE.md, added a rule, clarified wording, etc.]
+Pattern:    [Generalizable lesson, if any]
+```
+
+Correction ID format: CL + number (CL-1, CL-2, CL-3).
+
+Only log corrections where the root cause is systemic (a gap or conflict in instructions that would cause the same mistake again). Skip one-off misunderstandings.

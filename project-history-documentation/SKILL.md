@@ -12,6 +12,7 @@ disable-model-invocation: true
 - After fixing a bug with a non-obvious root cause
 - After making a decision where alternatives were considered
 - After a version release or architecture change
+- After receiving a user correction that reveals an instruction gap or repeated mistake
 
 Do NOT use for: API docs, user guides, or README files.
 
@@ -22,6 +23,9 @@ Add a bug catalog entry if the root cause was not immediately obvious. Skip triv
 
 ### After Every Non-Obvious Technical Decision
 Add a decision rationale entry if you considered alternatives before choosing.
+
+### After Every User Correction
+Add a corrections log entry if the user corrects Claude's behavior and the root cause is a gap in instructions, a conflicting rule, or a repeated mistake. Skip one-off misunderstandings or preference clarifications that won't recur.
 
 ### After Every Version Bump
 Update the version history table and review lessons learned for new entries.
@@ -43,6 +47,7 @@ Create PROJECT_HISTORY.md with sections 1-4 at project start. Add others as need
 | 9 | Test Architecture | When test suite exists | When test strategy changes |
 | 10 | Version History | After first release | After every version bump |
 | 11 | Lessons Learned | After first milestone | At every milestone |
+| 12 | Corrections Log | After first instruction gap correction | After every non-trivial correction |
 
 Consult `references/section-templates.md` for exact templates and formatting for each section.
 
@@ -54,9 +59,17 @@ Consult `references/section-templates.md` for exact templates and formatting for
 - Add a "Pattern" line when the bug teaches something reusable beyond this project
 - Include embarrassing bugs. Those are often the most valuable.
 
+## Corrections Log Rules
+
+- Use short IDs: CL-1, CL-2, etc.
+- Always include the root cause (why Claude made the mistake, not just what the mistake was)
+- Add a "Prevention" line describing what was changed to stop it from recurring
+- Only log corrections that reveal systemic issues -- skip one-off misunderstandings
+
 ## Quality Checklist
 
 - [ ] Every bug entry has a root cause, not just a fix
+- [ ] Every correction entry has a root cause and a prevention action
 - [ ] Decision rationale includes rejected alternatives and why
 - [ ] Implementation sequence reflects build order, not alphabetical
 - [ ] Code examples under 20 lines with WHY comments
