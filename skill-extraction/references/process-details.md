@@ -98,6 +98,10 @@ git commit -m "Add/update skills from [project name] v[version] lessons"
 git push
 ```
 
+## Step 7.5: Update Skill Index
+
+After creating or updating a skill, update `~/.claude/skills/SKILL_INDEX.md` with relevant keywords for that skill. Add a new line or update the existing line for the skill. Keywords should be specific technical terms, function names, or concepts that would appear in code or task descriptions.
+
 ## Step 8: Update Extraction Marker
 
 After logging and committing, update (or add) the extraction marker at the end of the project's PROJECT_HISTORY.md:

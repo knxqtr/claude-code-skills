@@ -19,12 +19,11 @@ Do NOT trigger for: documentation edits, config changes, renaming, formatting, o
 
 ## Process
 
-1. Run `ls ~/.claude/skills/` to see all available domain skills
-2. Read the `description:` line from each skill's SKILL.md frontmatter to understand what it covers
-3. Compare against the code you're about to write
-4. If a matching skill exists and is not already in the project's .claude/skills/ directory, copy it in:
+1. Read `~/.claude/skills/SKILL_INDEX.md` -- a keyword-to-skill mapping
+2. Check if any keywords match the code you're about to write
+3. If a matching skill exists and is not already in the project's .claude/skills/ directory, copy it in:
    `cp -r ~/.claude/skills/<skill-name> <project>/.claude/skills/`
-5. Read the skill before writing the code
+4. Read the skill before writing the code
 
 Skip skills already present in the project's .claude/skills/ directory.
 
@@ -42,5 +41,5 @@ When uncertain, read the skill's description. A false positive (reading a skill 
 ## Common Mistakes
 
 - Skipping the check because "this is simple code." Simple code is where most preventable bugs live.
-- Only checking skills you remember by name. Always run `ls` -- new skills may have been extracted since your last conversation.
+- Only checking skills you remember by name. Always check SKILL_INDEX.md -- new skills and keywords may have been added since your last conversation.
 - Checking but not copying into the project. If you don't copy it in, it won't be loaded next conversation.
