@@ -81,6 +81,12 @@ Format:
 - NEW SKILL: [skill-name] -- "[why no existing skill fit]"
 ```
 
+For mid-conversation extractions (not at a version milestone), use "dev" as the version:
+
+```markdown
+## [Project Name], dev ([Date])
+```
+
 If the same lesson gets SKIPPED 3+ times across different projects, flag it. Either the existing skill's rule is not clear enough, or it needs to be rewritten.
 
 ## Step 7: Commit and Push
@@ -90,4 +96,26 @@ cd ~/.claude/skills
 git add -A
 git commit -m "Add/update skills from [project name] v[version] lessons"
 git push
+```
+
+## Step 8: Update Extraction Marker
+
+After logging and committing, update (or add) the extraction marker at the end of the project's PROJECT_HISTORY.md:
+
+```
+<!-- last-extraction: YYYY-MM-DD, entries: N -->
+```
+
+Where N is the current total count of entries across bug catalog, decision rationale, corrections log, and lessons learned sections.
+
+This step is mandatory even when extraction finds nothing to extract. It resets the soft trigger count so it does not keep firing.
+
+If the marker already exists, replace it. If it does not exist, append it to the end of the file.
+
+After updating the marker, commit the PROJECT_HISTORY.md change:
+
+```bash
+cd /path/to/project
+git add PROJECT_HISTORY.md
+git commit -m "Update extraction marker"
 ```
