@@ -66,6 +66,17 @@ MANDATORY: Before writing code for this domain, use the Read tool to load `refer
 - Add a "Prevention" line describing what was changed to stop it from recurring
 - Only log corrections that reveal systemic issues -- skip one-off misunderstandings
 
+## Extraction Trigger Rule
+
+After writing any bug catalog entry, decision rationale entry, corrections log entry, or lessons learned entry, check whether extraction should run:
+
+1. Look for `<!-- last-extraction: YYYY-MM-DD, entries: N -->` at the end of PROJECT_HISTORY.md
+2. Count the current total number of entries across bug catalog, decision rationale, corrections log, and lessons learned sections
+3. If no marker exists, count all entries. If marker exists, calculate: current count - marker's entry count
+4. If the difference >= 2, immediately run the skill-extraction process
+
+Do not wait for a version milestone or push. Run extraction mid-conversation when the threshold is met.
+
 ## Quality Checklist
 
 - [ ] Every bug entry has a root cause, not just a fix
