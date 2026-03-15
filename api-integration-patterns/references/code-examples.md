@@ -109,3 +109,52 @@ def get_weight_per_minute(window_minutes=1):
 ```
 
 Rule: list every `asyncio.sleep` loop that makes API calls, multiply out the weight, and sum them all.
+
+## 10. Same Data, Different Field Names
+
+```python
+# Hyperliquid predictedFundings response:
+#   {"fundingIntervalHours": 8, "nextFundingTime": 1773561600000}
+#   Types: int, int
+
+# Bybit tickers response (same concept, different names and types):
+#   {"fundingIntervalHour": "8", "nextFundingTime": "1773561600000"}
+#   Types: string, string
+
+# Parse defensively -- explicit type conversion for each source
+interval = int(rate_data["fundingIntervalHours"])       # Hyperliquid: int key, int value
+interval = int(result["fundingIntervalHour"])            # Bybit: singular key, string value
+next_time = int(result["nextFundingTime"])               # Bybit: string, needs int()
+
+# Some venues return None for fields that exist on other venues
+# Always handle missing/None data per-field, not per-API-call
+for venue_name, rate_data in venues:
+    if rate_data is None:
+        logger.warning("Null data for %s/%s", coin, venue_name)
+        continue
+    try:
+        rate = Decimal(rate_data["fundingRate"])
+    except (KeyError, TypeError, InvalidOperation) as e:
+        logger.warning("Bad field for %s/%s: %s", coin, venue_name, e)
+        continue
+```
+
+## 11. Broad Sweep Then Targeted Validation
+
+```python
+# Stage 1: one API call returns data for all sources
+snapshots = await client.fetch_aggregated_data()  # covers 3 exchanges, 200+ coins
+
+# Stage 2: filter to candidates worth validating
+candidates = [s for s in snapshots if s.spread > threshold]  # maybe 3-5 out of 200
+
+# Stage 3: validate only the candidates against direct APIs
+# Use a semaphore to limit concurrent validation calls
+async with asyncio.Semaphore(5):
+    for candidate in candidates:
+        validated = await client.validate_with_source_api(candidate)
+        if divergence(validated, candidate) > 0.20:
+            candidate = recalculate(validated)
+
+# Result: 1 broad API call + 3-5 targeted calls instead of 200+ calls
+```
