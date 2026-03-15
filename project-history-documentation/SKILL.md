@@ -1,7 +1,6 @@
 ---
 name: project-history-documentation
 description: Maintains PROJECT_HISTORY.md with structured bug catalog, decision rationale, and lessons learned. Use when documenting bugs, technical decisions, version milestones, or architecture changes. Covers automatic documentation rules during development. Not for READMEs, API docs, or user guides.
-disable-model-invocation: true
 ---
 
 # Project History Documentation
@@ -76,6 +75,13 @@ After writing any bug catalog entry, decision rationale entry, corrections log e
 4. If the difference >= 2, immediately run the skill-extraction process
 
 Do not wait for a version milestone or push. Run extraction mid-conversation when the threshold is met.
+
+## Common Mistakes
+
+- Writing bug entries without root causes. Listing what broke and how it was fixed is not enough; document why it broke so the pattern can be recognized next time.
+- Logging one-off misunderstandings as corrections. Only log corrections that reveal a systemic gap or recurring mistake. Preference clarifications that won't recur add noise.
+- Adding project secrets to entries. API keys, server IPs, passwords, and internal URLs must never appear in PROJECT_HISTORY.md, even as examples.
+- Writing lessons as project-specific instead of transferable principles. A lesson that only applies to one codebase does not belong in a shared history document; extract the general rule instead.
 
 ## Quality Checklist
 

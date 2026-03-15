@@ -1,7 +1,6 @@
 ---
-name: project-claude-template
+name: project-config-template
 description: Generates a minimal project CLAUDE.md with auto-detected build/test/lint commands. Use when creating a new project or when an existing project is missing a CLAUDE.md. Do not use if CLAUDE.md already exists.
-disable-model-invocation: true
 ---
 
 # Project CLAUDE.md Template
@@ -99,6 +98,13 @@ Only include lines where a command was actually detected. If build was found but
 ```
 
 Just the title. No empty sections, no placeholders, no instructions to fill in later.
+
+## Common Mistakes
+
+- Adding rules from the global CLAUDE.md into the project file. The global file applies automatically; duplicating it causes conflicts when the global rules change.
+- Including placeholder sections (e.g., "## API Keys: fill in later"). If the content is not known, omit the section entirely.
+- Generating a CLAUDE.md when one already exists. Always check before writing.
+- Using the wrong project name. Derive it from the folder name, do not invent one.
 
 ## What This File Must NEVER Contain
 

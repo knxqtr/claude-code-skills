@@ -1,6 +1,6 @@
 ---
 name: financial-math-rules
-description: Accurate financial math rules. Use when code calculates money, prices, PnL, fees, or account balances.
+description: Accurate financial math rules for trading systems, payment processing, and accounting. Use when code calculates money, prices, PnL, fees, or account balances. Covers Decimal vs float, actual fill prices, fee deduction, balance types, rounding precision, and time window boundaries. Use when user says "rounding error", "fee calculation", or "balance mismatch".
 ---
 
 # Financial Math Rules

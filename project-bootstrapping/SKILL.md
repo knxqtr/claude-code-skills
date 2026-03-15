@@ -1,7 +1,6 @@
 ---
 name: project-bootstrapping
 description: Python project setup from scratch including folder structure, config centralization, venv, git, and testing. Use when starting a new bot, service, CLI tool, or any Python application. Covers build order, .gitignore, .env secrets, and test isolation.
-disable-model-invocation: true
 ---
 
 # Project Bootstrapping

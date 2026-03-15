@@ -1,7 +1,6 @@
 ---
 name: skill-extraction
-description: Extracts reusable skills from PROJECT_HISTORY.md bug catalog, lessons, and decisions. Triggers automatically at >= 2 new entries, at version bumps, or on request. Covers the extraction process, quality gate, and skill count limits.
-disable-model-invocation: true
+description: Extracts reusable skills from PROJECT_HISTORY.md bug catalog, lessons, and decisions. Triggers automatically at 2 or more new entries, at version bumps, or on request. Covers the extraction process, quality gate, and skill count limits.
 ---
 
 # Skill Extraction
