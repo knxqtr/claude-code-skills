@@ -14,7 +14,7 @@ description: Reliable API integration patterns including retries, caching, rate 
 
 ## Patterns
 
-1. **Price/Data Caching with Short TTL** — Cache responses for 2s+ to avoid hammering. See `references/code-examples.md`.
+1. **Price/Data Caching with Short TTL** — Cache responses for 2s+ to avoid hammering.
 2. **Skip Redundant Calls** — If local state matches desired state, don't call. Cache the last-set value.
 3. **Fuzzy Identifier Matching** — Different systems use different names. Build a mapper with known overrides.
 4. **"Not Found" on Cancel = Already Filled** — Treat this as success, not an error.
