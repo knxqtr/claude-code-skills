@@ -61,6 +61,8 @@ Every candidate rule must pass all three tests:
 
 If count reaches 40, stop and notify the user. Do not create new skills without user guidance.
 
+When count reaches 30, evaluate whether feedback tracking (do skills actually prevent bugs?), skill pruning/merging, or semantic skill loading is needed. Notify the user.
+
 ## Quality Checklist
 
 - [ ] Every rule passed the quality gate
