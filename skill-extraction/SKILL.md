@@ -1,6 +1,6 @@
 ---
 name: skill-extraction
-description: Extracts reusable skills from PROJECT_HISTORY.md bug catalog, lessons, and decisions. Use at version bumps or when asked to update, create, or review skills. Covers the 8-step extraction process, quality gate, and skill count limits.
+description: Extracts reusable skills from PROJECT_HISTORY.md bug catalog, lessons, and decisions. Triggers automatically at >= 2 new entries, at version bumps, or on request. Covers the extraction process, quality gate, and skill count limits.
 disable-model-invocation: true
 ---
 
@@ -8,11 +8,12 @@ disable-model-invocation: true
 
 ## When to Use
 
-- Automatically after a version bump (triggered by global CLAUDE.md rules)
+- Automatically when PROJECT_HISTORY.md accumulates >= 2 new extractable entries (bugs, decisions, corrections, lessons) since last extraction
+- Automatically before a git push (enforced by pre-push hook)
 - User asks to extract lessons into reusable skills
-- PROJECT_HISTORY.md has 3+ new bug catalog entries or lessons since last extraction
+- At version milestones
 
-Do NOT use during active development. Wait until a version milestone.
+Can run mid-conversation. Do not defer extraction until a push or version bump.
 
 ## Process Summary
 
@@ -23,6 +24,7 @@ Do NOT use during active development. Wait until a version milestone.
 5. Run quality gate on every rule
 6. Log the extraction
 7. Commit and push
+8. Update extraction marker in PROJECT_HISTORY.md
 
 MANDATORY: Before writing code for this domain, use the Read tool to load `references/process-details.md` from this skill's directory. Do not skip this step.
 
@@ -75,4 +77,4 @@ If count reaches 40, stop and notify the user. Do not create new skills without 
 - Creating a new skill for every bug. Most bugs add a rule to an existing skill.
 - Including project-specific details. Skills must be generic.
 - Writing vague instructions. "Handle errors properly" is not a skill. "Wrap every user-triggered operation in try/except and notify on the user-facing channel" is.
-- Extracting too early. Wait until a version milestone.
+- Ignoring the extraction trigger. When the soft trigger threshold (>= 2 new entries) is met, run extraction immediately. Do not defer.
