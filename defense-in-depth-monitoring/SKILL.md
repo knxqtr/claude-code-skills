@@ -34,7 +34,7 @@ When Layer 1 fires, cancel the next Layer 2 check to avoid duplicate processing.
 - Alert deduplication: health checks on a loop must track whether they already alerted for the current issue. Alert once, set a flag, reset when resolved.
 - Confirmation before acting on disappearances: when something vanishes from an external system, wait and re-check before acting. API glitches can return empty results temporarily.
 
-MANDATORY: Before writing code for this domain, use the Read tool to load `references/code-examples.md` from this skill's directory. Do not skip this step.
+For code examples, see references/code-examples.md in this skill's directory.
 
 ## Consecutive Error Escalation
 

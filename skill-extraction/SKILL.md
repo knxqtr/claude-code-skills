@@ -26,7 +26,7 @@ Can run mid-conversation. Do not defer extraction until a push or version bump.
 7. Commit and push
 8. Update extraction marker in PROJECT_HISTORY.md
 
-MANDATORY: Before writing code for this domain, use the Read tool to load `references/process-details.md` from this skill's directory. Do not skip this step.
+For the detailed step-by-step process, see references/process-details.md in this skill's directory.
 
 ## Priority Order
 

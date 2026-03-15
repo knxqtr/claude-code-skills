@@ -21,7 +21,7 @@ description: Accurate financial math rules. Use when code calculates money, pric
 5. **Rounding Must Match the Target System** -- Each asset has its own decimal precision requirement. Rounding incorrectly causes order rejections.
 6. **Time Window Boundaries** -- Use half-open intervals (>= start AND < end). Off-by-one errors cause double-counting or missed trades.
 
-MANDATORY: Before writing any financial math code, use the Read tool to load `references/code-examples.md` from this skill's directory. Do not skip this step.
+For code examples, see references/code-examples.md in this skill's directory.
 
 ## Common Mistakes
 

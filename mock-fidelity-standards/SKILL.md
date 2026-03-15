@@ -24,7 +24,7 @@ Mocks must reproduce error behavior, not just success behavior. A lenient mock g
 4. Never globally mock timing primitives. Replacing asyncio.sleep globally makes background loops spin at infinite speed, causing 100% CPU and crashes. Scope patches to specific functions.
 5. Deduplicate test utilities early. When 3+ test files share the same mock class, extract to a shared helper immediately. Duplicated mocks drift apart over time.
 
-MANDATORY: Before writing code for this domain, use the Read tool to load `references/code-examples.md` from this skill's directory. Do not skip this step.
+For code examples, see references/code-examples.md in this skill's directory.
 
 ## Checklist
 

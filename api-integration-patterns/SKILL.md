@@ -26,7 +26,7 @@ description: Reliable API integration patterns including retries, caching, rate 
 10. **Same Data, Different Field Names** — Different APIs return the same concept under different names and types. Parse defensively with explicit type conversion. Always verify against the actual response, not the docs.
 11. **Broad Sweep Then Targeted Validation** — When one API aggregates data from multiple sources, use it for the initial scan, then hit individual source APIs only for candidates that pass filtering.
 
-MANDATORY: Before writing any API integration code, use the Read tool to load `references/code-examples.md` from this skill's directory. Do not skip this step.
+For code examples and detailed patterns, see references/code-examples.md in this skill's directory.
 
 ## Common Mistakes
 

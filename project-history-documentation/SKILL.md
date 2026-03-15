@@ -49,7 +49,7 @@ Create PROJECT_HISTORY.md with sections 1-4 at project start. Add others as need
 | 11 | Lessons Learned | After first milestone | At every milestone |
 | 12 | Corrections Log | After first instruction gap correction | After every non-trivial correction |
 
-MANDATORY: Before writing code for this domain, use the Read tool to load `references/section-templates.md` and `references/writing-guidelines.md` from this skill's directory. Do not skip this step.
+For section templates and writing guidelines, see references/section-templates.md and references/writing-guidelines.md in this skill's directory.
 
 ## Bug Catalog Rules
 

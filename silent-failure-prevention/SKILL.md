@@ -58,4 +58,4 @@ For every user-facing operation, verify:
 - Retrying the same failing call as the only "fallback" strategy.
 - No wait period before alternative method. Sometimes the original failure self-resolves.
 
-MANDATORY: Before writing code for this domain, use the Read tool to load `references/code-examples.md` from this skill's directory. Do not skip this step.
+For code examples, see references/code-examples.md in this skill's directory.

@@ -48,4 +48,4 @@ In tests, do not replace asyncio.sleep globally. Background loops will spin at i
 - Cancelling tasks in arbitrary order during shutdown, causing ConnectionError or AttributeError.
 - Using a single global lock when per-resource locks would allow independent operations to run concurrently.
 
-MANDATORY: Before writing code for this domain, use the Read tool to load `references/code-examples.md` from this skill's directory. Do not skip this step.
+For code examples, see references/code-examples.md in this skill's directory.

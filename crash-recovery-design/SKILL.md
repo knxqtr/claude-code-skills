@@ -32,7 +32,7 @@ Unknown item with no history. Create a minimal tracking record with safe default
 3. Use a human-readable format (JSON) so you can debug by reading the file.
 4. Protect writes with a lock if multiple async tasks can modify state.
 
-MANDATORY: Before writing code for this domain, use the Read tool to load `references/startup-shutdown.md` from this skill's directory. Do not skip this step.
+For startup/shutdown ordering details, see references/startup-shutdown.md in this skill's directory.
 
 ## Common Mistakes
 

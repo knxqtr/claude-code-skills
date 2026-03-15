@@ -63,4 +63,4 @@ Bugs that hand-written tests miss:
 - Not self-testing the invariant checker. A buggy checker gives false confidence.
 - Running too few sequences. Use at least 1000 in CI. More is better.
 
-MANDATORY: Before writing code for this domain, use the Read tool to load `references/implementation-guide.md` from this skill's directory. Do not skip this step.
+For implementation details, see references/implementation-guide.md in this skill's directory.
