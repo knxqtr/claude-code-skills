@@ -14,89 +14,14 @@ description: Accurate financial math rules. Use when code calculates money, pric
 
 ## Rules
 
-### 1. Decimal, Not Float
+1. **Decimal, Not Float** -- IEEE 754 floats accumulate rounding errors. Use Decimal for all PnL, fee, and balance calculations. When converting floats to Decimal, wrap in str() first: `Decimal(str(value))`. Use `//` not `/` for integer intermediates mixed with Decimal.
+2. **Use Actual Fill Prices** -- Never record the intended price. Query the exchange for the actual fill price after placement. The difference is slippage.
+3. **Deduct Fees on Both Sides** -- Every trade has fees on entry AND exit. Taker and maker rates are usually different. Omitting fees makes reported PnL higher than actual.
+4. **Know Which Balance You Are Reading** -- Total equity vs available margin vs withdrawable balance. Using the wrong one causes sizing errors and false safety checks.
+5. **Rounding Must Match the Target System** -- Each asset has its own decimal precision requirement. Rounding incorrectly causes order rejections.
+6. **Time Window Boundaries** -- Use half-open intervals (>= start AND < end). Off-by-one errors cause double-counting or missed trades.
 
-IEEE 754 floats accumulate rounding errors. Over hundreds of operations, cents become dollars.
-
-```python
-# BAD: 0.1 + 0.2 = 0.30000000000000004
-total += 0.1 + 0.2
-
-# GOOD: exact decimal arithmetic
-from decimal import Decimal
-total += Decimal("0.1") + Decimal("0.2")  # = Decimal("0.3")
-```
-
-Use Decimal for all PnL, fee, and balance calculations. Use float only for non-financial values like percentages used in display.
-
-When converting config values or other floats to Decimal, always wrap in str() first:
-
-```python
-# BAD: Decimal(0.00005) becomes Decimal('0.000049999999999999996...')
-threshold = Decimal(config.MIN_THRESHOLD)
-
-# GOOD: Decimal("0.00005") is exact
-threshold = Decimal(str(config.MIN_THRESHOLD))
-```
-
-Also use `//` (integer division) not `/` (float division) when computing integer intermediate values that will be mixed with Decimals. `int / int` produces a float in Python 3, and `float * Decimal` raises TypeError.
-
-### 2. Use Actual Fill Prices
-
-Never use the intended price as the entry price. Always query the exchange/system for the actual fill price after order placement.
-
-```python
-# BAD: record intended price
-trade.entry_price = signal.entry_price
-
-# GOOD: query actual fill after placement
-order = await exchange.place_order(...)
-trade.entry_price = await exchange.get_fill_price(order.id)
-```
-
-The difference is slippage. Ignoring it means your PnL is wrong from the start.
-
-### 3. Deduct Fees on Both Sides
-
-Every trade has fees on entry AND exit. Omitting them makes reported PnL higher than actual.
-
-```python
-pnl = exit_value - entry_value
-pnl -= entry_notional * taker_fee_rate   # entry fee
-pnl -= exit_notional * maker_fee_rate    # exit fee (may differ)
-```
-
-Know your fee rates. Taker and maker rates are usually different.
-
-### 4. Know Which Balance You Are Reading
-
-External systems often expose multiple balance figures. Using the wrong one causes sizing errors and false safety checks.
-
-Common traps:
-- Total equity (includes spot + perps) vs available margin (perps only)
-- Account value vs withdrawable balance
-- Gross balance vs net-of-fees balance
-
-Always verify: "Does this number represent what I can actually use for this operation?"
-
-### 5. Rounding Must Match the Target System
-
-Exchanges and payment systems have specific decimal place requirements per asset. Rounding incorrectly causes order rejections.
-
-```python
-# Each asset has its own precision requirement
-# BTC: 4 decimal places for size, 1 for price
-# ETH: 3 decimal places for size, 2 for price
-# Check the API docs for each asset
-```
-
-### 6. Time Window Boundaries
-
-Off-by-one errors in time-based financial reports (daily PnL, weekly summaries) cause trades to be double-counted or missed entirely.
-
-- Define clear boundaries: daily = midnight UTC to midnight UTC
-- Use >= start AND < end (half-open intervals)
-- Test around boundaries explicitly
+MANDATORY: Before writing any financial math code, use the Read tool to load `references/code-examples.md` from this skill's directory. Do not skip this step.
 
 ## Common Mistakes
 
@@ -105,5 +30,5 @@ Off-by-one errors in time-based financial reports (daily PnL, weekly summaries) 
 - Forgetting fees exist, or only deducting on one side.
 - Using spot balance for perp margin calculations (or vice versa).
 - Hardcoding rounding to 2 decimal places when the asset requires 4 or 8.
-
-For detailed code examples, see `references/code-examples.md`.
+- Using `Decimal(0.00005)` instead of `Decimal(str(0.00005))` -- IEEE 754 contaminates the Decimal.
+- Using `int / int` in a formula with Decimals -- produces float, causes TypeError.
