@@ -19,3 +19,13 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 - NEW SKILL: project-history-documentation — "no existing skill covered technical build reference creation"
 - NEW SKILL: skill-extraction — "no existing skill covered extracting skills from project history"
 - Note: initial extraction, all skills were new. Future extractions should mostly update existing skills.
+
+## trading-bot, v3.3.2 (2026-03-15)
+- UPDATED api-integration-patterns — added "Track API Weight, Not Call Count" pattern and "Audit ALL Polling Loops" pattern. Root cause: pending limit fill monitors (2s poll, 2 calls each) were invisible in rate limit calculations, causing 429s overnight with 8 positions despite candle interval fix.
+- REVIEWED lessons learned — added 3 exchange integration entries (weight vs calls, hidden polling loops, rename grep discipline)
+- SKIPPED: no new skills needed. All learnings fit within existing api-integration-patterns skill.
+
+## funding-arb-bot, v0.1.0 (2026-03-15)
+- REVIEWED bug SF-1 (subagent disk fill) — already covered by silent-failure-prevention, no update needed
+- REVIEWED decisions (Python 3.13, perp-perp strategy, Bybit, GARCH priority) — project-specific, not generalizable
+- SKIPPED: no new code written yet, no new patterns to extract. Re-evaluate at v0.2.0 when scanner is built.

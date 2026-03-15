@@ -116,9 +116,40 @@ except ServerError:  # 5xx — transient, retry
     await asyncio.sleep(base_delay)
 ```
 
+### 8. Track API Weight, Not Call Count
+
+Many APIs (Hyperliquid, Binance, etc.) rate-limit on **weight**, not raw call count. Different endpoints cost different amounts. Track weight per minute, not calls per minute.
+
+```python
+# Bad: count calls — 100 lightweight calls and 100 candle calls look the same
+_call_count += 1
+
+# Good: track weight — candle calls cost 10x more than price checks
+_call_log.append((time.time(), weight))
+
+def get_weight_per_minute(window_minutes=1):
+    cutoff = time.time() - (window_minutes * 60)
+    return sum(w for t, w in _call_log if t >= cutoff) / window_minutes
+```
+
+### 9. Audit ALL Polling Loops for Rate Limit Budget
+
+When calculating API budget, account for every background loop — not just the obvious ones. Hidden consumers (pending order fill checkers, health monitors, reconnection handlers) can double the actual usage.
+
+```
+# Example: missed budget item
+# Visible: 6 position monitors × 30s candle poll = known cost
+# Hidden: 2 pending limit monitors × 2s poll × 2 API calls each = 240 extra weight/min
+# Result: 429 rate limit errors at night when new positions opened
+```
+
+Rule: list every `asyncio.sleep` loop that makes API calls, multiply out the weight, and sum them all.
+
 ## Common Mistakes
 
 - Calling get_price() every second when a 2-second cache would cut API calls in half.
 - Treating "order not found" on cancel as a crash-worthy error instead of a normal race condition.
 - Hardcoding identifier mappings only for the assets you trade today. New assets will fail silently.
 - Using production API keys during development.
+- Tracking API calls instead of API weight. A system can look healthy at 150 calls/min but be over budget at 1100 weight/min because of heavy endpoints.
+- Forgetting background polling loops when calculating rate limit budget. If you only audit the main monitoring loops, hidden pollers (fill checkers, health checks) will push you over the limit at scale.
