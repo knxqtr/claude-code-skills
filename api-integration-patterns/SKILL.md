@@ -24,7 +24,7 @@ description: Reliable API integration patterns including retries, caching, rate 
 8. **Track API Weight, Not Call Count** — Many APIs rate-limit on weight. A candle call (weight 20) costs 10x a price check (weight 2). Track and display weight/min.
 9. **Audit ALL Polling Loops** — List every background loop that makes API calls, multiply out the weight, sum them. Hidden consumers (fill checkers, health monitors) can double usage.
 
-Code examples for all patterns are in `references/code-examples.md`.
+MANDATORY: Before writing any API integration code, use the Read tool to load `references/code-examples.md` from this skill's directory. Do not skip this step.
 
 ## Common Mistakes
 

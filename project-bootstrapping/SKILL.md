@@ -71,4 +71,4 @@ For small projects (under 10 files), flat structure is fine. Do not over-organiz
 - No .gitignore before first commit. Secrets or venv end up in git history permanently.
 - Over-engineering folder structure for a 3-file project. Start flat, split when a file gets hard to navigate.
 
-For setup commands and config code, see `references/setup-commands.md`.
+MANDATORY: Before writing code for this domain, use the Read tool to load `references/setup-commands.md` from this skill's directory. Do not skip this step.

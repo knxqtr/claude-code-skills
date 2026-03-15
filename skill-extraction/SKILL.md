@@ -24,7 +24,7 @@ Do NOT use during active development. Wait until a version milestone.
 6. Log the extraction
 7. Commit and push
 
-For the full step-by-step process with commands and templates, see `references/process-details.md`.
+MANDATORY: Before writing code for this domain, use the Read tool to load `references/process-details.md` from this skill's directory. Do not skip this step.
 
 ## Priority Order
 

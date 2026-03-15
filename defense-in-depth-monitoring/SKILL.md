@@ -34,13 +34,11 @@ When Layer 1 fires, cancel the next Layer 2 check to avoid duplicate processing.
 - Alert deduplication: health checks on a loop must track whether they already alerted for the current issue. Alert once, set a flag, reset when resolved.
 - Confirmation before acting on disappearances: when something vanishes from an external system, wait and re-check before acting. API glitches can return empty results temporarily.
 
-For detailed code examples of time guards, alert dedup, and confirmation patterns, see `references/code-examples.md`.
+MANDATORY: Before writing code for this domain, use the Read tool to load `references/code-examples.md` from this skill's directory. Do not skip this step.
 
 ## Consecutive Error Escalation
 
 When a polling loop encounters repeated failures, escalate from silent logging to active alerting after a threshold. This catches sustained degradation that individual retries mask. The threshold prevents alert spam on transient issues while ensuring sustained failures get human attention.
-
-For code examples, see `references/code-examples.md`.
 
 ## Common Mistakes
 
