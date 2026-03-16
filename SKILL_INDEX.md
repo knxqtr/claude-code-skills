@@ -4,7 +4,7 @@ Keyword-to-skill mapping for skill-loader. Before writing implementation code, s
 
 ## Domain Skills
 
-retry, backoff, 429, rate limit, polling loop, API weight, caching, TTL, external API, SDK exception, identifier mapping -> api-integration-patterns
+retry, backoff, 429, rate limit, polling loop, API weight, caching, TTL, external API, SDK exception, identifier mapping, SDK wrapper, lazy import, run_in_executor, optional dependency -> api-integration-patterns
 
 asyncio.Lock, background task, shared state, race condition, graceful shutdown, lock file, task cancellation, shutdown ordering, sequential queue -> async-safety-checklist
 

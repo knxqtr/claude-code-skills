@@ -25,6 +25,7 @@ description: Reliable API integration patterns including retries, caching, rate 
 9. **Audit ALL Polling Loops** — List every background loop that makes API calls, multiply out the weight, sum them. Hidden consumers (fill checkers, health monitors) can double usage.
 10. **Same Data, Different Field Names** — Different APIs return the same concept under different names and types. Parse defensively with explicit type conversion. Always verify against the actual response, not the docs.
 11. **Broad Sweep Then Targeted Validation** — When one API aggregates data from multiple sources, use it for the initial scan, then hit individual source APIs only for candidates that pass filtering.
+12. **Isolate Third-Party SDKs in One File** — All imports of a third-party SDK should live in a single wrapper file. Use lazy imports inside methods (not at module top) so the SDK stays an optional dependency. If the SDK is sync and your codebase is async, wrap calls with `run_in_executor`. When the SDK ships a breaking release, only one file changes.
 
 For code examples and detailed patterns, see references/code-examples.md in this skill's directory.
 
@@ -36,3 +37,4 @@ For code examples and detailed patterns, see references/code-examples.md in this
 - Using production API keys during development.
 - Tracking calls instead of weight. 150 calls/min can be 1100 weight/min with heavy endpoints.
 - Forgetting background polling loops in rate limit budgets. Hidden pollers push you over at scale.
+- Importing a third-party SDK in 10+ files. When the SDK ships a breaking API change, you rewrite everywhere instead of one wrapper.

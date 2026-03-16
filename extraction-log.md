@@ -29,3 +29,9 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 - REVIEWED bug SF-1 (subagent disk fill) — already covered by silent-failure-prevention, no update needed
 - REVIEWED decisions (Python 3.13, perp-perp strategy, Bybit, GARCH priority) — project-specific, not generalizable
 - SKIPPED: no new code written yet, no new patterns to extract. Re-evaluate at v0.2.0 when scanner is built.
+
+## tao-miner, v0.2.0 (2026-03-16)
+- UPDATED api-integration-patterns: added pattern #12 "Isolate Third-Party SDKs in One File" (lazy imports, run_in_executor for sync SDKs, single file for breaking API changes) and corresponding common mistake
+- SKIPPED: L5 "do async from the start" -- obvious to experienced devs, fails quality gate test 3
+- SKIPPED: L6 "volatile chain data in cache not DB" -- already covered by api-integration-patterns pattern #1 (Price/Data Caching with Short TTL)
+- SKIPPED: D4/D5/D6 (async DB, metagraph separation, SDK wrapping decisions) -- project-specific, generic versions captured in L5/L6/L7
