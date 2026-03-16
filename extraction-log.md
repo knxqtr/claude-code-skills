@@ -35,3 +35,9 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 - SKIPPED: L5 "do async from the start" -- obvious to experienced devs, fails quality gate test 3
 - SKIPPED: L6 "volatile chain data in cache not DB" -- already covered by api-integration-patterns pattern #1 (Price/Data Caching with Short TTL)
 - SKIPPED: D4/D5/D6 (async DB, metagraph separation, SDK wrapping decisions) -- project-specific, generic versions captured in L5/L6/L7
+
+## tao-miner, v0.5.0 (2026-03-16)
+- UPDATED vps-deployment-checklist: added rule #4 "Secrets must not be CLI arguments" (from B005: Telegram token in ps output) and rule #5 "Uploaded scripts must live inside the package" (from lesson 10: wheel install breaks relative paths)
+- SKIPPED: B004 "Literal type coverage" -- grep for assignment sites is good practice but fails quality gate test 3 (most devs already do this)
+- SKIPPED: B006/L9 "trace CLI flags end-to-end" -- too generic, fails quality gate test 3 (obvious to experienced devs)
+- SKIPPED: L11 "check nullable DB returns" -- partially covered by crash-recovery-design Case C (missing fields)

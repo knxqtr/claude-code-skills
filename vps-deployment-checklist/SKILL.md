@@ -85,6 +85,24 @@ sudo systemctl stop my-bot        # stop
 sudo journalctl -u my-bot -f     # view logs
 ```
 
+### 4. Secrets must not be CLI arguments
+
+Never pass secrets (API tokens, passwords) as command-line arguments. They are visible to every user on the server via `ps aux`.
+
+Instead, write secrets to a config file with restricted permissions:
+```bash
+cat > ~/my-project/credentials.conf << 'EOF'
+api_token=secret_value
+EOF
+chmod 600 ~/my-project/credentials.conf
+```
+
+Then pass the file path: `--config-file ~/my-project/credentials.conf`
+
+### 5. Uploaded scripts must live inside the package
+
+If your deployment uploads helper scripts (watchdog, health check) to the server, keep them inside the Python package (e.g., `src/myapp/data/script.py`), not in a top-level `scripts/` directory. Relative path traversal from `__file__` breaks in wheel installs because the package tree is different from the source tree.
+
 ## Safety Mechanisms
 
 ### Lock file
