@@ -23,6 +23,7 @@ Mocks must reproduce error behavior, not just success behavior. A lenient mock g
 3. Partial operations are not full operations. If the real system can partially complete (partial fill, partial delete), the mock must model this. "Reduce by X" and "remove entirely" are fundamentally different.
 4. Never globally mock timing primitives. Replacing asyncio.sleep globally makes background loops spin at infinite speed, causing 100% CPU and crashes. Scope patches to specific functions.
 5. Deduplicate test utilities early. When 3+ test files share the same mock class, extract to a shared helper immediately. Duplicated mocks drift apart over time.
+6. Test data factories must use the same types as the real models. If a Pydantic model defines `extra_args: dict[str, str]`, the test helper must pass a dict, not an empty string. A factory that uses the wrong type tests a code path that production never hits.
 
 For code examples, see references/code-examples.md in this skill's directory.
 
@@ -34,6 +35,7 @@ When writing or reviewing a mock:
 - [ ] Does it handle partial operations (not just all-or-nothing)?
 - [ ] Are timing primitives only patched in scoped contexts?
 - [ ] Is this mock used in 3+ files? If so, is it in a shared helper?
+- [ ] Do test data factories use the same types as the real models?
 
 ## Common Mistakes
 
