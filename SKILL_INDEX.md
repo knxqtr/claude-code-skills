@@ -24,6 +24,8 @@ VPS, systemd, rsync, deployment, remote server, auto-restart, service unit, hear
 
 partial fill, cancel race, order resize, order lifecycle, limit order, market order -> order-management-edge-cases
 
+research, deep dive, unfamiliar domain, new feature design, domain knowledge, parallel agents, research agents, spec preparation, design research -> research-skill
+
 ## Maintenance
 
 When creating or updating a skill during extraction, update this index with relevant keywords.
