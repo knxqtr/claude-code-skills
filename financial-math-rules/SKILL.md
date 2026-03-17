@@ -20,6 +20,8 @@ description: Accurate financial math rules for trading systems, payment processi
 4. **Know Which Balance You Are Reading** -- Total equity vs available margin vs withdrawable balance. Using the wrong one causes sizing errors and false safety checks.
 5. **Rounding Must Match the Target System** -- Each asset has its own decimal precision requirement. Rounding incorrectly causes order rejections.
 6. **Time Window Boundaries** -- Use half-open intervals (>= start AND < end). Off-by-one errors cause double-counting or missed trades.
+7. **Unit Consistency in Comparisons** -- When comparing two financial values, verify they share the same units. Dollar PnL (price_delta * size) and price distance (atr * multiplier) are both floats but have different units. Comparing them produces silently wrong results. Any comparison: check left-side units == right-side units.
+8. **Defer Price-Relative Fields Until Fill** -- In order execution systems (backtester or live), do not set stop-loss, take-profit, or other price-relative fields until the actual fill price is known. The intended entry price and actual fill price can differ (slippage, next-bar fills). Set these fields in a post-fill callback, not at signal generation time.
 
 For code examples, see references/code-examples.md in this skill's directory.
 
@@ -32,3 +34,5 @@ For code examples, see references/code-examples.md in this skill's directory.
 - Hardcoding rounding to 2 decimal places when the asset requires 4 or 8.
 - Using `Decimal(0.00005)` instead of `Decimal(str(0.00005))` -- IEEE 754 contaminates the Decimal.
 - Using `int / int` in a formula with Decimals -- produces float, causes TypeError.
+- Comparing dollar PnL against a price distance without realizing they have different units (off by position size factor).
+- Setting stop-loss on a Signal before the fill price is known -- the stop distance will be wrong if the fill price differs from the signal price.

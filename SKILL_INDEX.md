@@ -12,7 +12,7 @@ restart, crash recovery, state file, loses state, daemon, long-running service, 
 
 health check, alert, missed event, duplicate alert, false trigger, price trigger, multi-layer detection, dead man's switch, time guard -> defense-in-depth-monitoring
 
-Decimal, money, PnL, fee, balance, rounding, fill price, slippage, taker rate, maker rate, half-open interval -> financial-math-rules
+Decimal, money, PnL, fee, balance, rounding, fill price, slippage, taker rate, maker rate, half-open interval, unit mismatch, stop-loss, deferred pricing, price distance -> financial-math-rules
 
 mock, fake, stub, test simulator, error fidelity, partial fill, cross-cutting failure, timing mock -> mock-fidelity-standards
 
