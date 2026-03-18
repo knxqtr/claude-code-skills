@@ -22,6 +22,9 @@ description: Accurate financial math rules for trading systems, payment processi
 6. **Time Window Boundaries** -- Use half-open intervals (>= start AND < end). Off-by-one errors cause double-counting or missed trades.
 7. **Unit Consistency in Comparisons** -- When comparing two financial values, verify they share the same units. Dollar PnL (price_delta * size) and price distance (atr * multiplier) are both floats but have different units. Comparing them produces silently wrong results. Any comparison: check left-side units == right-side units.
 8. **Defer Price-Relative Fields Until Fill** -- In order execution systems (backtester or live), do not set stop-loss, take-profit, or other price-relative fields until the actual fill price is known. The intended entry price and actual fill price can differ (slippage, next-bar fills). Set these fields in a post-fill callback, not at signal generation time.
+9. **Lock/Unlock Must Balance** -- When value is locked (margin, escrow, holds, reserves), the lock must be a debit from available balance. If you only credit on unlock without debiting on lock, you create phantom money. Always trace a full round-trip: debit at lock, credit at unlock. Test with a zero-profit round-trip to verify the balance returns to its starting value.
+10. **Leverage Means Fraction-of-Margin** -- In leveraged trading, "fraction" conventionally means fraction of capital posted as margin (collateral). Leverage amplifies that into notional exposure. 20% fraction at 5x = 20% margin controlling 100% notional. If a sizer function accepts a leverage parameter but ignores it, the sizing model silently differs from what traders expect.
+11. **Guard Every Division in Indicators** -- Financial indicator formulas frequently divide by values that can be zero in real data: flat prices (high == low), zero volume, constant RSI, zero ATR. Every division needs a guard (replace zero denominator with NaN, or return a sensible default like 50 for oscillators). This is not theoretical -- it happens regularly with low-liquidity crypto pairs.
 
 For code examples, see references/code-examples.md in this skill's directory.
 
@@ -36,3 +39,6 @@ For code examples, see references/code-examples.md in this skill's directory.
 - Using `int / int` in a formula with Decimals -- produces float, causes TypeError.
 - Comparing dollar PnL against a price distance without realizing they have different units (off by position size factor).
 - Setting stop-loss on a Signal before the fill price is known -- the stop distance will be wrong if the fill price differs from the signal price.
+- Locking margin/escrow without debiting available balance. The unlock credits it back, creating money from nothing. Every lock needs a matching debit.
+- Accepting a leverage parameter in a sizing function but not using it. Traders expect leverage to amplify exposure; ignoring it produces undersized positions.
+- Leaving indicator divisions unguarded because "zero prices don't happen." They do -- flat candles, zero volume, and constant oscillator values are common in crypto.

@@ -51,11 +51,22 @@ For every user-facing operation, verify:
 - [ ] Fallback failure triggers maximum-urgency alert
 - [ ] Emergency operations prioritize completion over quality
 
+## Data Pipeline Consistency
+
+When filtering a subset of data for evaluation, ALL inputs to the evaluation must be filtered -- not just the primary data. If you filter trades to out-of-sample-only but pass the full equity curve to a metrics function, the metrics are silently wrong. This applies to any pipeline where:
+- One input is filtered (e.g., trades) but a correlated input (e.g., equity curve) is not
+- Serialized data omits fields that downstream consumers reference via `dict.get()` with defaults
+- A subset is selected for scoring but the scoring function receives unfiltered auxiliary data
+
+The failure mode is always silent: no crash, no error, just plausible-looking wrong numbers.
+
 ## Common Mistakes
 
 - Catching exceptions in a framework error handler that only logs. The user sees the "processing" message but never gets a result.
 - Only wrapping one call site when the same function is called from multiple places.
 - Retrying the same failing call as the only "fallback" strategy.
 - No wait period before alternative method. Sometimes the original failure self-resolves.
+- Serializing data without all fields the consumer needs. `dict.get("missing_key", "")` silently returns the default, producing wrong results instead of a crash.
+- Filtering primary data but not auxiliary data in a multi-input evaluation (e.g., filtering trades but not the equity curve).
 
 For code examples, see references/code-examples.md in this skill's directory.

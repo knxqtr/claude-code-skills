@@ -12,13 +12,13 @@ restart, crash recovery, state file, loses state, daemon, long-running service, 
 
 health check, alert, missed event, duplicate alert, false trigger, price trigger, multi-layer detection, dead man's switch, time guard -> defense-in-depth-monitoring
 
-Decimal, money, PnL, fee, balance, rounding, fill price, slippage, taker rate, maker rate, half-open interval, unit mismatch, stop-loss, deferred pricing, price distance -> financial-math-rules
+Decimal, money, PnL, fee, balance, rounding, fill price, slippage, taker rate, maker rate, half-open interval, unit mismatch, stop-loss, deferred pricing, price distance, margin, leverage, escrow, lock/unlock, indicator division, div-by-zero -> financial-math-rules
 
 mock, fake, stub, test simulator, error fidelity, partial fill, cross-cutting failure, timing mock -> mock-fidelity-standards
 
 fuzz test, Hypothesis, random testing, state machine testing, invariant, event generation, simulated clock -> property-based-testing
 
-silent failure, no error message, failed silently, fallback, notification, user feedback, emergency priority -> silent-failure-prevention
+silent failure, no error message, failed silently, fallback, notification, user feedback, emergency priority, missing dict key, filtered subset, data pipeline consistency -> silent-failure-prevention
 
 VPS, systemd, rsync, deployment, remote server, auto-restart, service unit, heartbeat -> vps-deployment-checklist
 
