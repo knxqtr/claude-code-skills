@@ -41,3 +41,9 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 - SKIPPED: B004 "Literal type coverage" -- grep for assignment sites is good practice but fails quality gate test 3 (most devs already do this)
 - SKIPPED: B006/L9 "trace CLI flags end-to-end" -- too generic, fails quality gate test 3 (obvious to experienced devs)
 - SKIPPED: L11 "check nullable DB returns" -- partially covered by crash-recovery-design Case C (missing fields)
+
+## strategy-backtester, v1.0.2 (2026-03-18)
+- UPDATED financial-math-rules: added rules #12 (separate NaN sources in indicators), #13 (mirror short exits correctly), #14 (include all costs in per-trade PnL), plus 4 new common mistakes. From B014 (fillna warmup), B015 (inverted short exits), entry commission fix.
+- UPDATED silent-failure-prevention: added dict.get config fallback pattern to Data Pipeline Consistency section. From B017 (num_folds hardcoded to 5 via missing config key).
+- SKIPPED: B016 (_current_bar_index misalignment) -- project-specific bar indexing issue, not generalizable beyond backtesters
+- SKIPPED: Pine Script syntax fixes -- platform-specific quirks, not generalizable (already noted in financial-math-rules lesson about Pine v5 availability)

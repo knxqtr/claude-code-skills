@@ -60,6 +60,8 @@ When filtering a subset of data for evaluation, ALL inputs to the evaluation mus
 
 The failure mode is always silent: no crash, no error, just plausible-looking wrong numbers.
 
+Watch for `dict.get("key", default)` where the key is expected to exist but doesn't. The default value silently masks the absence. Common case: config dicts where a key was never added but the code assumes it exists. If a threshold depends on a runtime-computed value (like number of folds based on dataset size), call the computation function directly instead of looking up a config key with a fallback.
+
 ## Common Mistakes
 
 - Catching exceptions in a framework error handler that only logs. The user sees the "processing" message but never gets a result.

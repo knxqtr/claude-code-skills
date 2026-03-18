@@ -26,6 +26,10 @@ description: Accurate financial math rules for trading systems, payment processi
 10. **Leverage Means Fraction-of-Margin** -- In leveraged trading, "fraction" conventionally means fraction of capital posted as margin (collateral). Leverage amplifies that into notional exposure. 20% fraction at 5x = 20% margin controlling 100% notional. If a sizer function accepts a leverage parameter but ignores it, the sizing model silently differs from what traders expect.
 11. **Guard Every Division in Indicators** -- Financial indicator formulas frequently divide by values that can be zero in real data: flat prices (high == low), zero volume, constant RSI, zero ATR. Every division needs a guard (replace zero denominator with NaN, or return a sensible default like 50 for oscillators). This is not theoretical -- it happens regularly with low-liquidity crypto pairs.
 
+12. **Separate NaN Sources in Indicators** -- Indicator series can have NaN from multiple causes: warmup period (rolling window not filled), division by zero (flat range), and missing input data. Each cause requires a different fix (warmup: leave as NaN, div-by-zero: return neutral default like 50 for oscillators, missing: forward-fill or skip). Using a blanket `fillna()` to fix one cause silently corrupts the others. Save the warmup mask before fixing div-by-zero, then restore it after.
+13. **Mirror Short Exits Correctly for Bounded Oscillators** -- For oscillators with fixed bounds (RSI 0-100, WillR -100 to 0, MFI 0-100), long exits at the upper bound (e.g., RSI > 70) mirror to short exits at the lower bound (e.g., RSI < 30). The direction of the comparison operator flips AND the threshold moves to the opposite end. A common mistake is flipping only the threshold but not the operator direction, producing conditions that are true most of the time.
+14. **Include All Costs in Per-Trade PnL** -- trade.pnl should reflect the complete cost of the round trip (entry commission + exit commission + any holding costs). If entry cost is deducted from capital separately at entry time, the capital restoration at exit must add it back to avoid double-counting. Incomplete per-trade PnL distorts profit_factor, avg_winner, avg_loser, and any downstream metric derived from individual trade results.
+
 For code examples, see references/code-examples.md in this skill's directory.
 
 ## Common Mistakes
@@ -42,3 +46,6 @@ For code examples, see references/code-examples.md in this skill's directory.
 - Locking margin/escrow without debiting available balance. The unlock credits it back, creating money from nothing. Every lock needs a matching debit.
 - Accepting a leverage parameter in a sizing function but not using it. Traders expect leverage to amplify exposure; ignoring it produces undersized positions.
 - Leaving indicator divisions unguarded because "zero prices don't happen." They do -- flat candles, zero volume, and constant oscillator values are common in crypto.
+- Using `fillna(neutral_value)` to fix division-by-zero NaN, which also fills warmup NaN with fake data. Save the warmup mask first.
+- Mirroring long exit `> 70` to short exit `> 30` instead of `< 30`. The operator direction flips along with the threshold.
+- Reporting per-trade PnL that excludes entry commission. Capital tracking may be correct while per-trade metrics are silently optimistic.
