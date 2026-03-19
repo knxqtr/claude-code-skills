@@ -42,6 +42,13 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 - SKIPPED: B006/L9 "trace CLI flags end-to-end" -- too generic, fails quality gate test 3 (obvious to experienced devs)
 - SKIPPED: L11 "check nullable DB returns" -- partially covered by crash-recovery-design Case C (missing fields)
 
+## strategy-backtester, v1.0.8 (2026-03-19)
+- UPDATED financial-math-rules: expanded rule #5 (rounding) with Python round() vs int() cross-platform note. From B021 (HMA banker's rounding vs TradingView truncation).
+- SKIPPED: B018/B019 (short condition double-inversion, exit inversion missed) -- "uniform transformation on non-uniform inputs" is a general programming pitfall, not domain-specific enough for a skill. The financial-math-rules rule #13 (mirror short exits) already covers the oscillator-specific case.
+- SKIPPED: B020 (stale _prev_row) -- "shared state updated in one lifecycle phase" is a general state management bug. Too generic for a skill rule.
+- SKIPPED: B022 (robustness param name mismatch) -- project-specific parameter naming issue. The general lesson (parameter mapping completeness) is too obvious to pass quality gate test 3.
+- SKIPPED: B023 (early return blocking recovery) -- general control flow issue. "Don't put recovery code after an early return that blocks it" fails quality gate test 3.
+
 ## strategy-backtester, v1.0.2 (2026-03-18)
 - UPDATED financial-math-rules: added rules #12 (separate NaN sources in indicators), #13 (mirror short exits correctly), #14 (include all costs in per-trade PnL), plus 4 new common mistakes. From B014 (fillna warmup), B015 (inverted short exits), entry commission fix.
 - UPDATED silent-failure-prevention: added dict.get config fallback pattern to Data Pipeline Consistency section. From B017 (num_folds hardcoded to 5 via missing config key).
