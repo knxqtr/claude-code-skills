@@ -30,6 +30,10 @@ description: Accurate financial math rules for trading systems, payment processi
 13. **Mirror Short Exits Correctly for Bounded Oscillators** -- For oscillators with fixed bounds (RSI 0-100, WillR -100 to 0, MFI 0-100), long exits at the upper bound (e.g., RSI > 70) mirror to short exits at the lower bound (e.g., RSI < 30). The direction of the comparison operator flips AND the threshold moves to the opposite end. A common mistake is flipping only the threshold but not the operator direction, producing conditions that are true most of the time.
 14. **Include All Costs in Per-Trade PnL** -- trade.pnl should reflect the complete cost of the round trip (entry commission + exit commission + any holding costs). If entry cost is deducted from capital separately at entry time, the capital restoration at exit must add it back to avoid double-counting. Incomplete per-trade PnL distorts profit_factor, avg_winner, avg_loser, and any downstream metric derived from individual trade results.
 
+15. **Exclude Incomplete Trades from Backtest Stats** -- In fixed-target backtesting, trades that never hit TP or SL before the data ends are incomplete. If they are lumped into the "loss" bucket (because `hit_tp == False`), they corrupt win rate, expectancy, and profit factor. Give every trade result a three-state outcome (`tp`, `sl`, `open`), exclude `open` trades from core statistics, and report their count separately. A high open-trade count also signals that TP targets may be too far or the strategy fires too close to the data boundary.
+
+16. **Never Use df.iloc in Hot Loops** -- In backtesting bar loops that iterate over thousands of candles, `df.iloc[idx]` creates a full pandas Series object on every call (~22 microseconds each). For 3000+ bars repeated across thousands of candidates, this dominates runtime. Convert the DataFrame to a list of dicts before the loop: `rows = df.to_dict('records')`, then use `rows[idx]`. Dict key access is ~120x faster than Series creation. This applies ONLY to hot loops (bar-by-bar iteration over large DataFrames). `df.iloc` is fine for: single-row lookups, accessing a handful of rows, small DataFrames (< 100 rows), or when you need Series-specific features (.index, .dtype, method chaining, boolean indexing). If strategies use `row.name` (the DataFrame index), use a dict subclass with a `.name` attribute to preserve compatibility.
+
 For code examples, see references/code-examples.md in this skill's directory.
 
 ## Common Mistakes
@@ -49,3 +53,5 @@ For code examples, see references/code-examples.md in this skill's directory.
 - Using `fillna(neutral_value)` to fix division-by-zero NaN, which also fills warmup NaN with fake data. Save the warmup mask first.
 - Mirroring long exit `> 70` to short exit `> 30` instead of `< 30`. The operator direction flips along with the threshold.
 - Reporting per-trade PnL that excludes entry commission. Capital tracking may be correct while per-trade metrics are silently optimistic.
+- Using `df.iloc[idx]` inside a bar loop that runs thousands of times. Each call creates a pandas Series object. Convert to dicts before the loop.
+- Treating trades that never resolved (no TP or SL hit) as losses. They are incomplete data, not losses. Exclude them from stats and report their count separately.
