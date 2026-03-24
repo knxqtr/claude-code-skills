@@ -54,3 +54,11 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 - UPDATED silent-failure-prevention: added dict.get config fallback pattern to Data Pipeline Consistency section. From B017 (num_folds hardcoded to 5 via missing config key).
 - SKIPPED: B016 (_current_bar_index misalignment) -- project-specific bar indexing issue, not generalizable beyond backtesters
 - SKIPPED: Pine Script syntax fixes -- platform-specific quirks, not generalizable (already noted in financial-math-rules lesson about Pine v5 availability)
+
+## FATB, v0.1.0 (2026-03-24)
+- ADDED to api-integration-patterns: "No-Retry on Irreversible Actions -- check position instead of retrying market orders"
+- ADDED to api-integration-patterns: "WebSocket Over Polling When Available -- flat-cost monitoring vs linear REST polling"
+- SKIPPED: "pandas datetime64[us] vs [ns]" -- too framework-version-specific, narrow applicability
+- SKIPPED: "numpy booleans fail identity checks" -- too framework-specific, narrow applicability
+- SKIPPED: "Startup ordering: Telegram before recovery" -- already covered by crash-recovery-design common mistakes
+- SKIPPED: "Resample ourselves vs use exchange data" -- project-specific decision, not a reusable pattern

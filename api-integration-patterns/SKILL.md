@@ -26,6 +26,8 @@ description: Reliable API integration patterns including retries, caching, rate 
 10. **Same Data, Different Field Names** — Different APIs return the same concept under different names and types. Parse defensively with explicit type conversion. Always verify against the actual response, not the docs.
 11. **Broad Sweep Then Targeted Validation** — When one API aggregates data from multiple sources, use it for the initial scan, then hit individual source APIs only for candidates that pass filtering.
 12. **Isolate Third-Party SDKs in One File** — All imports of a third-party SDK should live in a single wrapper file. Use lazy imports inside methods (not at module top) so the SDK stays an optional dependency. If the SDK is sync and your codebase is async, wrap calls with `run_in_executor`. When the SDK ships a breaking release, only one file changes.
+13. **No-Retry on Irreversible Actions** — For actions that could duplicate (market orders, payments, messages), do NOT retry on failure. Instead: wait briefly, then check if the action took effect. If it did, treat as success. If not, re-raise the error. Retrying risks double execution.
+14. **WebSocket Over Polling When Available** — If the API offers WebSocket subscriptions, use them for monitoring instead of REST polling. REST polling weight scales with the number of items monitored. WebSocket is flat-cost regardless of item count. Keep REST as a periodic safety net (e.g., every 20-30s) to catch anything WebSocket missed.
 
 For code examples and detailed patterns, see references/code-examples.md in this skill's directory.
 
