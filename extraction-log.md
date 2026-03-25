@@ -62,3 +62,8 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 - SKIPPED: "numpy booleans fail identity checks" -- too framework-specific, narrow applicability
 - SKIPPED: "Startup ordering: Telegram before recovery" -- already covered by crash-recovery-design common mistakes
 - SKIPPED: "Resample ourselves vs use exchange data" -- project-specific decision, not a reusable pattern
+
+## Trading Bot, v3.5.0 (2026-03-25)
+- UPDATED crash-recovery-design: added "Redundant State Backup" section — back up state file to an already-integrated external service to survive full server loss
+- SKIPPED: v3.4.0 /closelongs /closeshorts — project-specific feature, no transferable pattern
+- SKIPPED: v3.4.1 TP2 PnL breakdown — project-specific notification formatting

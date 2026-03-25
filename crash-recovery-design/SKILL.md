@@ -38,6 +38,10 @@ Every field that recovery code reads must have a safe value from the moment the 
 
 For startup/shutdown ordering details, see references/startup-shutdown.md in this skill's directory.
 
+## Redundant State Backup
+
+A single state file on one disk is a single point of failure. If the server dies or is redeployed, the file is gone and recovery falls to Case C with incomplete data. Back up the state file to a service the application already integrates with (e.g., a pinned message in a messaging platform, a cloud key-value store, or a config endpoint). Requirements: debounce writes to avoid rate limits, suppress backup during recovery to prevent partial state from overwriting a good backup, and restore from backup before falling through to Case C on startup.
+
 ## Common Mistakes
 
 - Case C missing fields: code assumes fields exist that only Case A populates. Every code path that touches an item must work with Case C's minimal record. Populate ALL fields with defaults.
