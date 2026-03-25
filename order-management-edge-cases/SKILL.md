@@ -35,6 +35,14 @@ reduce_only orders on most exchanges clip to the actual position size, so oversi
 
 Before using aggregate position as a fallback for fill detection, check if other active trades exist on the same asset. If they do, the aggregate is unreliable. Give WebSocket fill data time to arrive (2-3 poll cycles) before deciding.
 
+## Order ID Replacement and Deferred Fills
+
+When a fill callback replaces an order ID on a trade (e.g. TP1 handler cancels old SL and places a new BE stop), any queued fills for the old ID become unmatchable. This happens when fills are deferred -- network outage queuing, held fills during concurrent operations, or simply asyncio task scheduling.
+
+Maintain a replaced-order-ID fallback map: `old_id -> (trade_id, order_type)`. When the main order lookup fails, check the fallback. Pop entries after use to prevent stale matches.
+
+This applies whenever: (1) a fill callback mutates order tracking on a trade, AND (2) fills can be delivered out of band (queued, deferred, or concurrent). If both conditions are true, the mutation-before-lookup race exists.
+
 ## Common Mistakes
 
 - Using `get_position(asset)` size as fill_size when multiple strategies trade the same asset.
@@ -42,3 +50,4 @@ Before using aggregate position as a fallback for fill detection, check if other
 - Assuming order gone = fully filled. Could be cancelled by exchange (margin call, liquidation).
 - Not cleaning up per-order fill tracking after the monitor exits (memory leak for long-running bots).
 - Sizing reduce_only exits for the aggregate position. They clip to actual size but interfere with other strategies' positions.
+- Assuming order IDs are stable after fill callbacks. If a TP1 handler replaces the SL, queued fills for the old SL ID silently drop unless a fallback lookup exists.
