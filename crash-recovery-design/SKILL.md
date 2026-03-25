@@ -32,6 +32,10 @@ Unknown item with no history. Create a minimal tracking record with safe default
 3. Use a human-readable format (JSON) so you can debug by reading the file.
 4. Protect writes with a lock if multiple async tasks can modify state.
 
+## Safe Defaults at Creation Time
+
+Every field that recovery code reads must have a safe value from the moment the object is created -- not just after a later processing stage completes. If a multi-step operation creates an object (step 1), then computes derived fields (step 2), a crash between steps 1 and 2 leaves the object with whatever defaults step 1 set. Recovery will use those defaults to take real actions. Example: a trade created with `sl_price=0.0` that gets its real SL calculated later. If recovery runs before the real SL is set, it places a stop at 0.0. Compute safe estimates at creation time, even if they'll be overwritten later.
+
 For startup/shutdown ordering details, see references/startup-shutdown.md in this skill's directory.
 
 ## Common Mistakes

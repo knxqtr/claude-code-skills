@@ -62,6 +62,10 @@ The failure mode is always silent: no crash, no error, just plausible-looking wr
 
 Watch for `dict.get("key", default)` where the key is expected to exist but doesn't. The default value silently masks the absence. Common case: config dicts where a key was never added but the code assumes it exists. If a threshold depends on a runtime-computed value (like number of folds based on dataset size), call the computation function directly instead of looking up a config key with a fallback.
 
+## State Machine Exception Safety
+
+Generic `except Exception` blocks in state machine drivers must not leave the object in an intermediate state. If a monitor or handler raises unexpectedly, the state machine entry stays wherever it was when the exception fired -- typically a non-terminal state like "processing" or "entering" that no other code path handles. Always transition to a terminal or safe state in the except block (close, cancel, error). Without this, the entry is orphaned: no active handler, no safety net coverage, no user notification.
+
 ## Common Mistakes
 
 - Catching exceptions in a framework error handler that only logs. The user sees the "processing" message but never gets a result.
@@ -70,5 +74,6 @@ Watch for `dict.get("key", default)` where the key is expected to exist but does
 - No wait period before alternative method. Sometimes the original failure self-resolves.
 - Serializing data without all fields the consumer needs. `dict.get("missing_key", "")` silently returns the default, producing wrong results instead of a crash.
 - Filtering primary data but not auxiliary data in a multi-input evaluation (e.g., filtering trades but not the equity curve).
+- Generic except blocks that log but leave state machines in intermediate states. The entry stays orphaned forever.
 
 For code examples, see references/code-examples.md in this skill's directory.

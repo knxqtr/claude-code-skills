@@ -37,7 +37,11 @@ If two operations can race and produce an incorrect combined result, process the
 
 Stop things in dependency order: producers first (monitors/workers), then schedulers, then communication channels last. If you cancel in arbitrary order, a monitor may try to send through an already-closed channel.
 
-### 6. Never Globally Mock Timing Primitives
+### 6. All External-State Tasks in the Cancellation List
+
+Every background task that manages external state (exchange orders, API sessions, file locks) must be explicitly cancelled during shutdown. If a task creates or holds resources externally, its CancelledError handler is responsible for cleaning them up. Tasks not in the cancellation list keep running after shutdown begins -- their cleanup handlers never fire, leaving external resources orphaned. Audit: collect all `asyncio.create_task()` calls and verify each is tracked in a list that gets cancelled during shutdown.
+
+### 7. Never Globally Mock Timing Primitives
 
 In tests, do not replace asyncio.sleep globally. Background loops will spin at infinite speed and crash. Patch sleep only in the specific function being tested.
 
