@@ -48,3 +48,4 @@ A single state file on one disk is a single point of failure. If the server dies
 - Recovery before notification channel: notifications silently fail because the channel is not connected yet.
 - No lock file: two instances run simultaneously, duplicating all actions. Use atomic lock files (O_CREAT | O_EXCL, not exists() + create()).
 - Batched writes: process dies between state change and next write cycle, losing the change. Write immediately.
+- Synthetic marker values as recovery discriminators: writing a placeholder value (e.g. `strategy="recovered"`) to a data field during recovery, then using `field != "recovered"` as a Case A discriminator on the next restart. The marker survives into subsequent saves and blocks correct recovery. Use a separate explicit field (e.g. `recovery_source`) that records how the record was populated, rather than overloading a data field with a sentinel.

@@ -33,6 +33,8 @@ For code examples and detailed patterns, see references/code-examples.md in this
 
 15. **Verify SDK Constructor Defaults** — Third-party SDK constructors may silently disable features via hidden defaults. Example: `Exchange.__init__` passes `skip_ws=True` to `Info.__init__`, so `ws_manager` is always None. Read the SDK source for any constructor you depend on. After init, assert that the objects you need are actually created (`assert info.ws_manager is not None`).
 16. **Per-Item Error Handling in Batch Subscriptions** — When subscribing/registering/connecting to multiple items (coins, channels, endpoints), wrap each item in its own try/except. One unavailable item must not abort the remaining items. Log the failure per-item and continue.
+17. **Derive Signing Address from Private Key, Verify at Startup** — In crypto exchange APIs, the "wallet address" (for reading) and the "signing address" (derived from the private key) are separate concepts. An API may accept either for read operations but require the registered API wallet for writes. At startup, derive the address from the private key (`Account.from_key(key).address`) and verify it matches expectations. Mismatch causes read-only symptoms: polling works, all order placement fails with "wallet does not exist."
+18. **Startup Jitter for Multiple Polling Instances** — When N background pollers start simultaneously (e.g., N=8 monitors recovering together), per-sleep jitter prevents drift over time but does NOT prevent the initial synchronized burst at T=0. Add a per-instance startup offset sampled once at init: `self._startup_offset = random.uniform(0, poll_interval)`. Sleep this offset before the first poll. CDN-layer rate limits (Cloudfront, Fastly) track burst rate per IP, independently of an API's weight-based limits — they can trigger even when weight usage is low.
 
 ## Common Mistakes
 
@@ -45,3 +47,4 @@ For code examples and detailed patterns, see references/code-examples.md in this
 - Importing a third-party SDK in 10+ files. When the SDK ships a breaking API change, you rewrite everywhere instead of one wrapper.
 - Trusting SDK constructor defaults without reading the source. A constructor may silently skip WebSocket, caching, or auth init.
 - Wrapping batch subscribe/register loops in a single try/except. One bad item kills the rest.
+- Assuming read access implies write access. In two-address API auth systems, valid read credentials can coexist with invalid signing credentials for months before a write is attempted.

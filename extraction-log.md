@@ -67,3 +67,8 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 - UPDATED crash-recovery-design: added "Redundant State Backup" section — back up state file to an already-integrated external service to survive full server loss
 - SKIPPED: v3.4.0 /closelongs /closeshorts — project-specific feature, no transferable pattern
 - SKIPPED: v3.4.1 TP2 PnL breakdown — project-specific notification formatting
+
+## Trading Bot, v3.5.1 (2026-03-26)
+- UPDATED api-integration-patterns: added pattern #17 "Derive Signing Address from Private Key, Verify at Startup" (AX-1: API wallet address mismatch — reads fine, writes fail with "wallet does not exist")
+- UPDATED api-integration-patterns: added pattern #18 "Startup Jitter for Multiple Polling Instances" (TP-4: synchronized startup of 8 monitors caused Cloudfront 429 bursts every ~12 minutes; per-sleep jitter alone doesn't prevent initial phase alignment)
+- UPDATED crash-recovery-design: added common mistake about synthetic marker values as recovery discriminators (RP-4: strategy="recovered" blocked Case A on subsequent restart)
