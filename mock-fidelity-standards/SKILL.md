@@ -22,7 +22,7 @@ Mocks must reproduce error behavior, not just success behavior. A lenient mock g
 2. Cross-cutting concerns must cover ALL methods. When adding a failure mode (network sim, rate limiting) to a mock, audit every public method. Missing one creates a hole where tests pass but production fails.
 3. Partial operations are not full operations. If the real system can partially complete (partial fill, partial delete), the mock must model this. "Reduce by X" and "remove entirely" are fundamentally different.
 4. Never globally mock timing primitives. Replacing asyncio.sleep globally makes background loops spin at infinite speed, causing 100% CPU and crashes. Scope patches to specific functions.
-5. Deduplicate test utilities early. When 3+ test files share the same mock class, extract to a shared helper immediately. Duplicated mocks drift apart over time.
+5. Shared fixtures belong in conftest.py, not in test files. Pytest fixtures defined in a test file are file-scoped — other test files that request them get "fixture not found" and ERROR at setup (not FAILED), so broken tests silently appear to pass in CI if you only look at the pass/fail count. Extract to conftest.py as soon as a fixture is used by more than one file.
 6. Test data factories must use the same types as the real models. If a Pydantic model defines `extra_args: dict[str, str]`, the test helper must pass a dict, not an empty string. A factory that uses the wrong type tests a code path that production never hits.
 
 For code examples, see references/code-examples.md in this skill's directory.
@@ -34,7 +34,7 @@ When writing or reviewing a mock:
 - [ ] Does every public method have the same failure modes?
 - [ ] Does it handle partial operations (not just all-or-nothing)?
 - [ ] Are timing primitives only patched in scoped contexts?
-- [ ] Is this mock used in 3+ files? If so, is it in a shared helper?
+- [ ] Is this fixture/mock used in more than one file? If so, is it in conftest.py (not a test file)?
 - [ ] Do test data factories use the same types as the real models?
 
 ## Common Mistakes

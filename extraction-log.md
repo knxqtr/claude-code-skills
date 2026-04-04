@@ -68,6 +68,11 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 - SKIPPED: v3.4.0 /closelongs /closeshorts — project-specific feature, no transferable pattern
 - SKIPPED: v3.4.1 TP2 PnL breakdown — project-specific notification formatting
 
+## FATB, v3.1.1 (2026-04-04)
+- UPDATED mock-fidelity-standards Rule 5: clarified that shared fixtures belong in conftest.py (not test files), and that file-scoped fixtures produce ERROR at setup rather than FAILED, causing broken tests to silently appear to pass
+- SKIPPED: WS health poll 30s → 1s -- implementation detail of thread-based WebSocket SDK health checks, not generalizable
+- SKIPPED: git local core.hooksPath override -- too narrow; single-sentence fix, no existing skill to add to
+
 ## Trading Bot, v3.5.1 (2026-03-26)
 - UPDATED api-integration-patterns: added pattern #17 "Derive Signing Address from Private Key, Verify at Startup" (AX-1: API wallet address mismatch — reads fine, writes fail with "wallet does not exist")
 - UPDATED api-integration-patterns: added pattern #18 "Startup Jitter for Multiple Polling Instances" (TP-4: synchronized startup of 8 monitors caused Cloudfront 429 bursts every ~12 minutes; per-sleep jitter alone doesn't prevent initial phase alignment)
