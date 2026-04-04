@@ -26,6 +26,8 @@ partial fill, cancel race, order resize, order lifecycle, limit order, market or
 
 research, deep dive, unfamiliar domain, new feature design, domain knowledge, parallel agents, research agents, spec preparation, design research -> research-skill
 
+walk-forward, WFT, holdout, out-of-sample, OOS, backtest stages, window isolation, cross-window, simulation correctness, pipeline stages -> backtesting-validation
+
 ## Maintenance
 
 When creating or updating a skill during extraction, update this index with relevant keywords.

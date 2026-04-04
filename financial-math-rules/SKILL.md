@@ -55,3 +55,4 @@ For code examples, see references/code-examples.md in this skill's directory.
 - Reporting per-trade PnL that excludes entry commission. Capital tracking may be correct while per-trade metrics are silently optimistic.
 - Using `df.iloc[idx]` inside a bar loop that runs thousands of times. Each call creates a pandas Series object. Convert to dicts before the loop.
 - Treating trades that never resolved (no TP or SL hit) as losses. They are incomplete data, not losses. Exclude them from stats and report their count separately.
+- Comparing entry fee modes (taker vs maker) without measuring the actual drag in R. At 100+ trades/month with a 1.5% SL, taker round-trip friction is ~0.35R/trade vs ~0.10R/trade for maker. The difference is larger than many strategies' entire expectancy edge.

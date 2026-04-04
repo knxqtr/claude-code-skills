@@ -61,10 +61,28 @@ If multiple config files are found (e.g., pyproject.toml AND package.json in a f
 
 Write the file to `./CLAUDE.md` in the project root.
 
+Every CLAUDE.md must start with these two sections, left blank for the user to fill in:
+
+```
+## Project Overview
+
+[Fill in]
+
+## Key Design Points
+
+[Fill in]
+```
+
 ### If build/test/lint commands were detected (single language):
 
 ```
-# [Project Name]
+## Project Overview
+
+[Fill in]
+
+## Key Design Points
+
+[Fill in]
 
 ## Build and Test
 
@@ -78,7 +96,13 @@ Only include lines where a command was actually detected. If build was found but
 ### If build/test/lint commands were detected (multiple languages):
 
 ```
-# [Project Name]
+## Project Overview
+
+[Fill in]
+
+## Key Design Points
+
+[Fill in]
 
 ## Build and Test
 
@@ -94,17 +118,85 @@ Only include lines where a command was actually detected. If build was found but
 ### If NO config files were found:
 
 ```
-# [Project Name]
+## Project Overview
+
+[Fill in]
+
+## Key Design Points
+
+[Fill in]
 ```
 
-Just the title. No empty sections, no placeholders, no instructions to fill in later.
+### Always append Critical Rules
+
+Always append a Critical Rules section after Build and Test (or after Key Design Points if no build commands were found). Adapt the language-specific lines to match the detected project language. Code Organization, Testing, and Security are identical for all languages. Only the Code Style section changes.
+
+```
+## Critical Rules
+
+### 1. Code Organization
+
+- Many small files over few large files
+- High cohesion, low coupling
+- 200-400 lines typical, 800 max per file
+- Organize by feature/domain, not by type
+
+### 2. Code Style
+
+- No emojis in code, comments, or documentation
+- Prefer immutability - avoid mutating shared state
+- [language-specific logging rule]
+- [language-specific error handling rule]
+- [language-specific input validation rule]
+
+### 3. Testing
+
+- TDD: Write tests first
+- 80% minimum coverage
+- Unit tests for utilities
+- Integration tests for APIs
+- E2E tests for critical flows
+
+### 4. Security
+
+- No hardcoded secrets
+- Environment variables for sensitive data
+- Validate all external inputs (API responses, user config)
+- Never log or expose API keys or private keys
+```
+
+Language-specific Code Style lines:
+
+Python:
+- Use logging module, not print, in production code
+- Proper error handling with try/except
+- Input validation with Pydantic or similar
+
+JavaScript / TypeScript:
+- Use a logger (e.g. pino, winston), not console.log, in production code
+- Proper error handling with try/catch
+- Input validation with Zod or similar
+
+Rust:
+- Use the tracing or log crate, not println!, in production code
+- Proper error handling with Result and the ? operator, no unwrap in production
+- Input validation with serde and validator
+
+Go:
+- Use log/slog, not fmt.Println, in production code
+- Proper error handling: return errors explicitly, no panic in production
+- Input validation with go-playground/validator or similar
+
+For multi-language projects, combine the relevant lines from each language under the Code Style section.
 
 ## Common Mistakes
 
 - Adding rules from the global CLAUDE.md into the project file. The global file applies automatically; duplicating it causes conflicts when the global rules change.
-- Including placeholder sections (e.g., "## API Keys: fill in later"). If the content is not known, omit the section entirely.
+- Omitting the Project Overview and Key Design Points placeholder sections. Always include them even if blank.
 - Generating a CLAUDE.md when one already exists. Always check before writing.
 - Using the wrong project name. Derive it from the folder name, do not invent one.
+- Omitting Critical Rules. Always include them for every project.
+- Using Python-specific Code Style lines for a non-Python project. Always adapt to the detected language.
 
 ## What This File Must NEVER Contain
 

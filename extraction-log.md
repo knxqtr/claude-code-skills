@@ -77,3 +77,11 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 - UPDATED api-integration-patterns: added pattern #17 "Derive Signing Address from Private Key, Verify at Startup" (AX-1: API wallet address mismatch — reads fine, writes fail with "wallet does not exist")
 - UPDATED api-integration-patterns: added pattern #18 "Startup Jitter for Multiple Polling Instances" (TP-4: synchronized startup of 8 monitors caused Cloudfront 429 bursts every ~12 minutes; per-sleep jitter alone doesn't prevent initial phase alignment)
 - UPDATED crash-recovery-design: added common mistake about synthetic marker values as recovery discriminators (RP-4: strategy="recovered" blocked Case A on subsequent restart)
+
+## signal-backtester, v4.3.0 (2026-04-04)
+- NEW SKILL: backtesting-validation — WFT window isolation (simulate per OOS window, not global simulate + filter), holdout must use same engine as training, save all pipeline outputs to files before downstream runs. No existing skill covered WFT simulation correctness.
+- UPDATED financial-math-rules: added common mistake about taker vs maker fee drag. At 100+ trades/month, the difference can exceed a strategy's entire edge.
+- SKIPPED: JIT/numba cold-start benchmark lesson (too niche, only applies to projects using native JIT compilation)
+- SKIPPED: Exit A vs Exit D holdout durability (trading strategy evaluation, too domain-specific)
+- SKIPPED: Regime sensitivity of WFT OOS results (trading-specific, no generalizable code pattern)
+- SKIPPED: Walk-forward persistent executor bug (v3.4.29) — project-specific wiring issue, not a generalizable pattern
