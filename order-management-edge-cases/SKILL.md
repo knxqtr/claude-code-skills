@@ -43,6 +43,22 @@ Maintain a replaced-order-ID fallback map: `old_id -> (trade_id, order_type)`. W
 
 This applies whenever: (1) a fill callback mutates order tracking on a trade, AND (2) fills can be delivered out of band (queued, deferred, or concurrent). If both conditions are true, the mutation-before-lookup race exists.
 
+## WebSocket Reconnect Fill Dedup
+
+When a WebSocket subscription is re-established (reconnect, SDK re-init), the exchange SDK may replay the full fill history to the new subscription callback. Without dedup, old fills from already-closed trades get re-processed and misclassified (e.g., as forced reductions when a newer trade exists on the same asset).
+
+Track processed fills in a dedup set keyed on immutable fill attributes (order_id, size, price, fee). Check the set before processing each fill. The set persists across reconnects so replayed fills are silently skipped.
+
+## Exit Dispatch Must Not Depend Solely on Order Status
+
+Order status transitions (e.g., "filled") arrive via a different WebSocket channel than fill data. They are not synchronized. A limit order can partially fill, accumulating fill data via the fill stream, but the order status stream may never emit "filled" if the order remains partially open.
+
+Track cumulative fill size per exit order ID from the fill stream. When the cumulative fill reaches the expected exit order size (use a 99% threshold for rounding tolerance), dispatch the exit immediately -- do not wait for the order status stream to confirm "filled".
+
+Add a defense-in-depth guard in the order health/reconciliation layer: before classifying a position size delta as an external forced reduction, subtract any cumulative fills on tracked exit orders from the expected tracked size.
+
+Prevent double dispatch with a dispatched-exit set: if the fill stream dispatches an exit, record the order ID. When the order status stream arrives with "filled" for the same order, skip the dispatch.
+
 ## Common Mistakes
 
 - Using `get_position(asset)` size as fill_size when multiple strategies trade the same asset.
@@ -51,3 +67,5 @@ This applies whenever: (1) a fill callback mutates order tracking on a trade, AN
 - Not cleaning up per-order fill tracking after the monitor exits (memory leak for long-running bots).
 - Sizing reduce_only exits for the aggregate position. They clip to actual size but interfere with other strategies' positions.
 - Assuming order IDs are stable after fill callbacks. If a TP1 handler replaces the SL, queued fills for the old SL ID silently drop unless a fallback lookup exists.
+- Relying solely on order status "filled" for exit dispatch. Partial fills accumulate in the fill stream but the order status may never transition to "filled".
+- Not deduplicating fills after WebSocket reconnect. The SDK replays full fill history to the new subscription, causing old fills to be re-processed.

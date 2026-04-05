@@ -66,6 +66,14 @@ Watch for `dict.get("key", default)` where the key is expected to exist but does
 
 Generic `except Exception` blocks in state machine drivers must not leave the object in an intermediate state. If a monitor or handler raises unexpectedly, the state machine entry stays wherever it was when the exception fired -- typically a non-terminal state like "processing" or "entering" that no other code path handles. Always transition to a terminal or safe state in the except block (close, cancel, error). Without this, the entry is orphaned: no active handler, no safety net coverage, no user notification.
 
+## Sanitize Error Messages Before Formatted Notifications
+
+When sending error messages through a formatted channel (HTML, Markdown), the error content itself may contain markup that breaks the formatter. Exchange APIs returning HTML error pages (502, 503), stack traces containing angle brackets, or user input with special characters will cause the notification to be rejected by the downstream service (e.g., Telegram rejects unparseable HTML).
+
+Always escape or sanitize error message content before embedding it in a formatted template. In Python: `html.escape(error_msg)` before wrapping in `<code>` tags. If the formatted send fails, fall back to plain text mode rather than retrying the same broken message.
+
+This matters most during outages, when error notifications are most critical. A notification system that fails when the thing it monitors fails is worse than no notification system.
+
 ## Common Mistakes
 
 - Catching exceptions in a framework error handler that only logs. The user sees the "processing" message but never gets a result.

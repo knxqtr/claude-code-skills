@@ -4,6 +4,12 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 
 ---
 
+## FATB, v3.2.0 (2026-04-05)
+- UPDATED: order-management-edge-cases — added "WebSocket Reconnect Fill Dedup" section (RC-36) and "Exit Dispatch Must Not Depend Solely on Order Status" section (RC-37)
+- UPDATED: silent-failure-prevention — added "Sanitize Error Messages Before Formatted Notifications" section (RC-38)
+- SKIPPED: startup leverage skip (RC-37 fix #4) — project-specific Hyperliquid API behavior, not transferable
+- SKIPPED: WS resubscribe fast-fail (RC-37 fix #5) — SDK-specific reconnection quirk, not transferable
+
 ## trading-bot, v3.2.2 (2026-03-14)
 - NEW SKILL: crash-recovery-design — "no existing skill covered state persistence and startup recovery"
 - NEW SKILL: silent-failure-prevention — "no existing skill covered user feedback and fallback patterns"
