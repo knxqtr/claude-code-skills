@@ -4,6 +4,10 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 
 ---
 
+## FATB, v3.2.2 (2026-04-06)
+- UPDATED: async-safety-checklist — added rule 8 "Guard Set Entry Must Precede the First Await in the Guarded Block" (RC-39)
+- SKIPPED: duplicate metrics display (RC-40) — project-specific monitoring display behavior, not transferable
+
 ## FATB, v3.2.0 (2026-04-05)
 - UPDATED: order-management-edge-cases — added "WebSocket Reconnect Fill Dedup" section (RC-36) and "Exit Dispatch Must Not Depend Solely on Order Status" section (RC-37)
 - UPDATED: silent-failure-prevention — added "Sanitize Error Messages Before Formatted Notifications" section (RC-38)

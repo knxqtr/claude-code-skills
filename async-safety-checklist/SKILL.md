@@ -45,6 +45,28 @@ Every background task that manages external state (exchange orders, API sessions
 
 In tests, do not replace asyncio.sleep globally. Background loops will spin at infinite speed and crash. Patch sleep only in the specific function being tested.
 
+### 8. Guard Set Entry Must Precede the First Await in the Guarded Block
+
+When a guard set (e.g. `_dispatched_oids`) prevents two concurrent async paths from processing the same event twice, add the item to the set **before** the first `await` inside the guarded block -- not after. Between an `await` and the next line, another coroutine can run, check the guard, find it empty, and duplicate the work.
+
+```python
+# WRONG -- guard has a window during the await
+if oid not in self._dispatched:
+    await self._do_work(oid)
+    self._dispatched.add(oid)   # too late; duplicate may run during await
+
+# CORRECT -- guard is active for the entire dispatch
+if oid not in self._dispatched:
+    self._dispatched.add(oid)   # claim the slot before yielding
+    try:
+        await self._do_work(oid)
+    except Exception:
+        self._dispatched.discard(oid)  # allow retry on failure
+        raise
+```
+
+On exception, discard the oid so the other path can retry.
+
 ## Common Mistakes
 
 - Forgetting that file I/O is shared mutable state. Two tasks saving to the same JSON file will corrupt it without a lock.
