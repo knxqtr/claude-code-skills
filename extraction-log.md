@@ -95,3 +95,5 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 - SKIPPED: Exit A vs Exit D holdout durability (trading strategy evaluation, too domain-specific)
 - SKIPPED: Regime sensitivity of WFT OOS results (trading-specific, no generalizable code pattern)
 - SKIPPED: Walk-forward persistent executor bug (v3.4.29) — project-specific wiring issue, not a generalizable pattern
+## signal-backtester, v4.6.25 (2026-04-07)
+- SKIPPED: "robust_map must report unsubmitted tasks and completed failure futures on timeout/broken submit paths" -- already covered by existing skills `silent-failure-prevention` (no silent drops in multi-input pipelines) and `crash-recovery-design` (full accounting for in-flight work under failure).
