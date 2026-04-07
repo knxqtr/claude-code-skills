@@ -97,3 +97,6 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 - SKIPPED: Walk-forward persistent executor bug (v3.4.29) — project-specific wiring issue, not a generalizable pattern
 ## signal-backtester, v4.6.25 (2026-04-07)
 - SKIPPED: "robust_map must report unsubmitted tasks and completed failure futures on timeout/broken submit paths" -- already covered by existing skills `silent-failure-prevention` (no silent drops in multi-input pipelines) and `crash-recovery-design` (full accounting for in-flight work under failure).
+
+## signal-backtester, v4.6.27 (2026-04-07)
+- SKIPPED: "keep three robust ordered-batch helpers duplicated until a fourth copy appears or semantics converge" -- project-specific maintenance threshold, not a reusable cross-project skill.
