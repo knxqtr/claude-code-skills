@@ -17,11 +17,12 @@ Standardized analysis and promotion formats for each pipeline stage.
 
 1. Verify every claim with code -- do not assume
 2. Check column sign conventions before applying gates (e.g. max_drawdown may be positive magnitude)
-3. From exit sweep onward, rank by total_r / max_dd (Calmar in R-space), not per-trade expectancy. A high-volume config with moderate edge earns more money than a low-volume config with high edge. Quality gates filter garbage; Calmar picks the most productive survivors.
-4. Label robustness: ROBUST / MODERATE / FRAGILE with evidence
-5. Always show family-level breakdown, not just global top-N
-6. Note any estimated values or missing columns
-7. PF gate is volume-adjusted: < 500 trades PF >= 1.2, 500-2000 PF >= 1.15, > 2000 PF >= 1.1
+3. Funnel width policy: comp and param sweep are WIDE (threshold-based, no family caps). Exit sweep is the NARROWING POINT (family + plateau analysis). WFT is WIDE again (~200 configs, trust DSR for multiple testing correction).
+4. Ranking by stage: comp/param use terminal_reach_40. Exit sweep uses total_r per family. WFT uses calmar_r (total_r / max_dd) -- only WFT has trustworthy OOS drawdown.
+5. Label robustness: ROBUST / MODERATE / FRAGILE with evidence
+6. Always show family-level breakdown, not just global top-N
+7. Note any estimated values or missing columns
+8. PF gate is volume-adjusted at WFT: < 500 trades PF >= 1.2, 500-2000 PF >= 1.15, > 2000 PF >= 1.1
 
 ---
 
@@ -95,10 +96,11 @@ Same 4-level tuple: terminal_reach_40 > speed_bonus > coin_breadth > signal_coun
 ### Key Policy Rules
 
 - Do NOT treat single top point as winner
-- Prefer parameter plateaus over isolated maxima
+- Note parameter plateaus vs isolated maxima (informational, for exit sweep context)
 - Exact tradeability belongs to exit sweep, not here
-- Family-aware shortlisting, NOT single global top-N
-- Per-family N is set at run time and documented, not fixed by policy
+- Wide funnel: promote all configs that pass gates, threshold-based not family-capped
+- Do NOT cap per-family N at this stage -- family curation happens at exit sweep
+- Plateau analysis is informational here (document it), but do not use it to restrict promotion
 
 ### Analysis Framework (7 sections)
 
@@ -114,31 +116,18 @@ Same 4-level tuple: terminal_reach_40 > speed_bonus > coin_breadth > signal_coun
 
 ### Promotion Shortlist
 
-Format by tiers within each family:
+Wide funnel: promote ALL configs that pass gates. Do not cap per-family N -- exit sweep handles family curation.
 
 | # | Family | Trigger Params | tr40 | ci_lo | breadth | signals | Why |
 |---|--------|---------------|------|-------|---------|---------|-----|
 
-"Why" examples:
-- "Family best, plateau of 40 configs"
-- "Neighbor of #1, tests min_approach sensitivity"
-- "High volume (1200 signals), moderate ranking"
-
-Document the per-family N values chosen and rationale. Different families can get different N based on plateau shape.
-
-Group by family, then by trigger config within family. For each trigger config heading, state the plateau size and robustness label:
-
-**Trigger A: nt=3, approach=1, csl=2 (plateau of 40 configs, ROBUST)**
-
-| # | Trigger Params | tr40 | ci_lo | breadth | signals | Why |
-|---|---------------|------|-------|---------|---------|-----|
-| 1 | nt=3, a=1, b=0.25, csl=2 | 0.551 | 1.21 | 0.77 | 649 | Family best, center of plateau |
-| 2 | nt=3, a=2, b=0.25, csl=2 | 0.551 | 1.24 | 0.67 | 578 | Plateau neighbor, tests approach sensitivity |
+Note plateau information (size, robustness) for each family as context for exit sweep, but do not use it to restrict promotion at this stage.
 
 Always include:
-- Exclusion rationale for families/configs NOT promoted and why
+- Total configs promoted per family
+- Plateau observations (informational, not restrictive)
+- Exclusion rationale for configs that failed gates
 - Caveats for configs near gates (marginal ci_lo, borderline breadth)
-- Total config count per tier
 
 ---
 
@@ -157,10 +146,14 @@ First stage that decides real tradeability using full simulated results. Answers
 
 ### Key Policy Rules
 
+- This is the NARROWING POINT in the pipeline -- family and plateau curation starts here
 - Mandatory exit robustness review: inspect neighboring SL/RR/exit settings
 - Mark winners as ROBUST or FRAGILE based on how neighbors perform
 - Promote multiple configs from robust neighborhoods, not just single highest row
 - Preserve diversity across exit variants and filter families
+- Rank by total_r within families (NOT calmar -- in-sample DD is not trustworthy for ranking)
+- Target ~200 configs to WFT: top 15-25 per family by total_r, with plateau/robustness check
+- DSR at WFT self-corrects for the larger pool, so wider promotion is safe
 
 ### Analysis Framework (10 sections)
 
