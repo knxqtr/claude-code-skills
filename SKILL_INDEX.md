@@ -28,6 +28,8 @@ research, deep dive, unfamiliar domain, new feature design, domain knowledge, pa
 
 walk-forward, WFT, holdout, out-of-sample, OOS, backtest stages, window isolation, cross-window, simulation correctness, pipeline stages -> backtesting-validation
 
+sweep results, component sweep, param sweep, exit sweep, WFT results, holdout results, promotion shortlist, family ranking, plateau analysis, exit robustness, DSR, coin breadth gate, pipeline analysis -> sweep-result-analysis
+
 ## Maintenance
 
 When creating or updating a skill during extraction, update this index with relevant keywords.
