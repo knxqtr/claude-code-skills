@@ -101,5 +101,9 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 ## signal-backtester, v4.6.27 (2026-04-07)
 - SKIPPED: "keep three robust ordered-batch helpers duplicated until a fourth copy appears or semantics converge" -- project-specific maintenance threshold, not a reusable cross-project skill.
 
+## FATB, v3.3.0 (2026-04-08)
+- SKIPPED: limit entry retrace feature -- new feature implementation, not a bug fix or non-obvious pattern; the architecture (metadata bag for derived order prices, keeping original entry for cancel checks) is already covered by order-management-edge-cases and financial-math-rules
+- SKIPPED: defense-in-depth validation at both config and helper -- general good practice, fails quality gate test 3
+
 ## FATB, v3.2.3 (2026-04-07)
 - SKIPPED: "reset polling throttle timer after fallback REST check confirms target alive" -- single occurrence, covered by existing defense-in-depth-monitoring rules (confirmation before acting on disappearances, alert deduplication).
