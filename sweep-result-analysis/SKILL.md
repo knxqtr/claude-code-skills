@@ -17,10 +17,11 @@ Standardized analysis and promotion formats for each pipeline stage.
 
 1. Verify every claim with code -- do not assume
 2. Check column sign conventions before applying gates (e.g. max_drawdown may be positive magnitude)
-3. Present both expectancy-optimized and volume-optimized views where applicable
+3. From exit sweep onward, rank by total_r / max_dd (Calmar in R-space), not per-trade expectancy. A high-volume config with moderate edge earns more money than a low-volume config with high edge. Quality gates filter garbage; Calmar picks the most productive survivors.
 4. Label robustness: ROBUST / MODERATE / FRAGILE with evidence
 5. Always show family-level breakdown, not just global top-N
 6. Note any estimated values or missing columns
+7. PF gate is volume-adjusted: < 500 trades PF >= 1.2, 500-2000 PF >= 1.15, > 2000 PF >= 1.1
 
 ---
 
@@ -164,8 +165,8 @@ First stage that decides real tradeability using full simulated results. Answers
 ### Analysis Framework (10 sections)
 
 1. **Landscape:** total configs, passing gates, passing per family
-2. **Per-family top 5** by net_expectancy_primary. Show ALL: trigger params (extracted individually), exit_strategy, atr_sl, pct_sl, sl_type, entry_retrace_pct, rr_ratio, rr_ratio_2, trades, trades_per_month, total_months, gross/net_primary/net_conservative expectancy, win_rate, PF, max_drawdown, total_r, losing_months
-3. **Total R analysis:** total_r = cumulative R earned. For each family show top 5 by total_r. Compare: does total_r ranking change the picture? Flag families where volume-optimized config earns significantly more
+2. **Per-family top 5** by total_r (trades * expectancy). Show ALL: trigger params (extracted individually), exit_strategy, atr_sl, pct_sl, sl_type, entry_retrace_pct, rr_ratio, rr_ratio_2, trades, trades_per_month, total_months, gross/net_primary/net_conservative expectancy, win_rate, PF, max_drawdown, total_r, losing_months
+3. **Total R vs expectancy:** compare top 5 by total_r vs top 5 by expectancy. Flag families where the rankings diverge -- high-volume moderate-edge configs that rank differently under each metric
 4. **Trade volume / OOS feasibility:** for each family's best config, estimate OOS trades for WFT. Flag any below exploratory floor
 5. **Exit robustness (policy-required):** for each family's top trigger config, count exit variants passing gates, show net_exp at rank 1/5/10/20. Label ROBUST (>100 passing, flat top), MODERATE (30-100), FRAGILE (<30 or sharp cliff)
 6. **Trigger param diversity:** per family, how many unique trigger_params pass gates? Dominated by one or spread?
@@ -225,7 +226,7 @@ Main statistical and robustness validator before holdout. Answers: does the stra
 2. consistency >= 0.60
 3. consistency statistically meaningful (binomial test)
 4. aggregate OOS expectancy > 0
-5. OOS PF >= 1.2
+5. OOS PF >= 1.2 (< 500 trades), >= 1.15 (500-2000 trades), >= 1.1 (> 2000 trades)
 6. drawdown within policy limit
 7. aggregate OOS trades >= 100 hard floor, plus month-normalized exploratory and validated floors
 8. coin breadth gate passes (>= 30% of coins or >= 5 coins)
@@ -252,7 +253,9 @@ Main statistical and robustness validator before holdout. Answers: does the stra
 8. **Regime-robustness labels:** For each passing config, assign: REGIME-ROBUST (positive mean exp in all 3 regimes, >= 50% windows positive in worst regime), BULL-DEPENDENT (bear mean exp < +0.05R or < 50% bear windows positive), BEAR-SPECIALIST (bear is strongest regime), or REGIME-MIXED (other patterns). This label carries forward to holdout interpretation.
 9. **Cross-config comparison table:**
 
-| Config | OOS Exp | CI Lo | CI Hi | Retention | Consistency | PF | DD | DSR | Breadth | OOS Trades | Regime Label | Label | Pass? |
+| Config | OOS Exp | Total R | Calmar | CI Lo | CI Hi | Retention | Consistency | PF | DD | DSR | Breadth | OOS Trades | Regime Label | Label | Pass? |
+
+Sort this table by Calmar (total_r / max_dd) descending. This ranks configs by how much money they earn per unit of risk, accounting for trade volume. A high-volume config with moderate expectancy will rank above a low-volume config with high expectancy if it earns more total R per unit of drawdown.
 
 ### Promotion to Holdout
 
@@ -268,8 +271,8 @@ Present the WFT results in tiers for context:
 
 Per-config table:
 
-| # | Config | OOS Exp | CI Lo | DSR | Retention | Breadth | OOS Trades | Regime Label | Tier | Why |
-|---|--------|---------|-------|-----|-----------|---------|------------|--------------|------|-----|
+| # | Config | OOS Exp | Total R | Calmar | CI Lo | DSR | Retention | Breadth | OOS Trades | Regime Label | Tier | Why |
+|---|--------|---------|---------|--------|-------|-----|-----------|---------|------------|--------------|------|-----|
 
 Always include:
 - Which gate(s) each config failed and why
