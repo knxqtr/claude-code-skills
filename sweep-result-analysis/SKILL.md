@@ -116,7 +116,13 @@ Same 4-level tuple: terminal_reach_40 > speed_bonus > coin_breadth > signal_coun
 
 ### Promotion Shortlist
 
-Wide funnel: promote ALL configs that pass gates. Do not cap per-family N -- exit sweep handles family curation.
+Wide funnel: promote all gate-passers in principle. In practice, compute budget constrains to ~40-50 configs for exit sweep. Selection approach:
+
+1. Top 1 per gate-passing family (ensures every hypothesis gets tested)
+2. Remaining slots to strongest families (by best tr40) for param depth -- 2-3 per strong family
+3. Total ~40-50 after dedup
+
+This is still family-aware, but the key difference from old policy: no family gets shut out entirely, and strong families earn extra slots on merit rather than being hard-capped.
 
 | # | Family | Trigger Params | tr40 | ci_lo | breadth | signals | Why |
 |---|--------|---------------|------|-------|---------|---------|-----|
@@ -124,7 +130,8 @@ Wide funnel: promote ALL configs that pass gates. Do not cap per-family N -- exi
 Note plateau information (size, robustness) for each family as context for exit sweep, but do not use it to restrict promotion at this stage.
 
 Always include:
-- Total configs promoted per family
+- Total gate-passing configs and families
+- How many families got 1 slot vs 2-3 slots and why
 - Plateau observations (informational, not restrictive)
 - Exclusion rationale for configs that failed gates
 - Caveats for configs near gates (marginal ci_lo, borderline breadth)
