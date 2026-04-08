@@ -254,27 +254,25 @@ Main statistical and robustness validator before holdout. Answers: does the stra
 
 | Config | OOS Exp | CI Lo | CI Hi | Retention | Consistency | PF | DD | DSR | Breadth | OOS Trades | Regime Label | Label | Pass? |
 
-### Promotion Shortlist to Holdout
+### Promotion to Holdout
 
-Organize by tiers:
+**IMPORTANT: Promote ALL WFT configs to holdout, not just pass-only.** Do NOT use --pass-only when running holdout. The WFT statistical gates (DSR, coin breadth) can filter out configs with real edges. WFT is one gate, holdout is the other -- configs must pass both to be promoted, but each gate is applied independently, not sequentially.
 
-**Tier 1 -- validated promotions:** Pass all 11 criteria, above validated trade floor, strong DSR.
-**Tier 2 -- exploratory / underpowered:** Pass most criteria but below validated trade floor. Label clearly.
-**Tier 3 -- conditional:** Near-pass on one criterion, otherwise strong. Note which criterion is marginal.
+The WFT pass/fail label is still useful as a confidence indicator in the holdout analysis, but it should not prevent a config from being tested in holdout.
+
+Present the WFT results in tiers for context:
+
+**Tier 1 -- validated:** Pass all 11 criteria, above validated trade floor, strong DSR.
+**Tier 2 -- exploratory / underpowered:** Pass most criteria but below validated trade floor.
+**Tier 3 -- conditional / gate-failed:** Positive OOS expectancy but failed on DSR, coin breadth, or other statistical gates. Still promoted to holdout.
 
 Per-config table:
 
-| # | Config | OOS Exp | CI Lo | DSR | Retention | Breadth | OOS Trades | Label | Why |
-|---|--------|---------|-------|-----|-----------|---------|------------|-------|-----|
-
-"Why" examples:
-- "Strongest DSR in cohort, validated trade count"
-- "Best OOS expectancy but underpowered (280 vs 938 validated floor)"
-- "Wide breadth (85% coins), moderate DSR"
-- "Best exit robustness from prior stage, stable across regimes"
+| # | Config | OOS Exp | CI Lo | DSR | Retention | Breadth | OOS Trades | Regime Label | Tier | Why |
+|---|--------|---------|-------|-----|-----------|---------|------------|--------------|------|-----|
 
 Always include:
-- Exclusion rationale for configs that failed WFT and why
+- Which gate(s) each config failed and why
 - Caveats for configs near boundaries (marginal DSR, borderline CI)
 - Flag any config where regime sample was too sparse to test
 
@@ -330,18 +328,29 @@ Cross-reference with WFT regime labels from Stage 4: configs labeled BULL-DEPEND
 
 ### Promotion Shortlist to Paper Trading
 
-| # | Config | Holdout Exp | CI Lo | Trades | PF | DD | Breadth | Verdict | Why |
-|---|--------|-------------|-------|--------|----|----|---------|---------|-----|
+**Dual-gate promotion: configs must be positive in BOTH WFT and holdout.** WFT provides the long-term expectancy estimate and regime profile. Holdout provides survival confirmation on recent unseen data. Neither alone is sufficient.
+
+Selection criteria (in priority order):
+1. Positive in both WFT and holdout (hard gate)
+2. Regime balance in WFT -- prefer configs balanced across bull/bear/range over configs that peak in one regime
+3. WFT expectancy for long-term projection (holdout is a survival check, not a ranking tool)
+4. Trade volume, DD, monthly consistency as tie-breakers
+
+Do NOT rank by holdout performance. A config with +0.05R holdout and +0.30R WFT (balanced regimes) beats a config with +0.25R holdout and +0.17R WFT. The holdout winner likely just suits the holdout's specific regime.
+
+| # | Config | WFT Exp | HO Exp | Regime Label | WFT Trades | HO Trades | HO PF | HO DD | HO Months | Why |
+|---|--------|---------|--------|--------------|------------|-----------|-------|-------|-----------|-----|
 
 "Why" examples:
-- "PASS: strong expectancy, CI above zero, adequate breadth"
-- "MARGINAL: positive exp but CI includes zero, thin sample"
-- "FAIL: negative holdout expectancy, excluding"
+- "Positive both gates, balanced regimes, highest WFT exp in family"
+- "Regime-robust, strong WFT consistency (0.87), holdout survival confirmed"
+- "Best WFT+holdout balance (geometric mean), good trade volume"
 
 Always include:
-- Exclusion rationale for configs that failed holdout
+- Exclusion rationale for configs that failed either gate
 - Whether holdout is pristine or consumed (affects interpretation weight)
-- Any configs that passed WFT but failed holdout (important learning)
+- Any configs that passed WFT gates but failed holdout (regime mismatch learning)
+- Any configs that failed WFT gates but passed holdout (gate too strict learning)
 - For WFT passers that failed holdout: state their WFT regime label. If BULL-DEPENDENT configs failed a bear-heavy holdout, note this is regime mismatch, not unconditional failure.
 
 ### Post-Holdout
