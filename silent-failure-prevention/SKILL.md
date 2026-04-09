@@ -66,6 +66,22 @@ Watch for `dict.get("key", default)` where the key is expected to exist but does
 
 Generic `except Exception` blocks in state machine drivers must not leave the object in an intermediate state. If a monitor or handler raises unexpectedly, the state machine entry stays wherever it was when the exception fired -- typically a non-terminal state like "processing" or "entering" that no other code path handles. Always transition to a terminal or safe state in the except block (close, cancel, error). Without this, the entry is orphaned: no active handler, no safety net coverage, no user notification.
 
+## State Transitions Must Not Wipe Fields That Other Lookups Depend On
+
+When a state-machine transition replaces a structured field wholesale (e.g. `trade.orders = new_orders`), every downstream lookup that reads a key of that field becomes dead code if the key is dropped by the replacement. This is silent: the lookup compiles, runs, and always returns None, so any handler gated on it is never invoked. The feature appears to ship because tests manually set the field post-hoc and never exercise the post-transition state.
+
+Before any wholesale field replacement in a transition, list every downstream site that reads keys from the field. If any of them are expected to work after the transition, merge those keys back in, or keep the field append-only and only add new keys. Add at least one regression test that exercises the downstream lookup *after* driving the real transition (not by manually setting the field on a fresh fixture).
+
+Red flag: a feature ships with passing tests, then never fires in production. Check whether the test fixtures reproduce a state the real code path could actually reach, or whether they skip the transition entirely.
+
+## Auto-Remediation Must Notify on Success, Not Only Failure
+
+Reconciliation paths that silently correct state divergence (residual position cleanup, orphan order cancellation, tracker/exchange size reconciliation) must emit a user-visible notification on successful remediation, not only on failure. A silent successful remediation swallows the very thing it was remediating -- if the residual came from real unreported activity, the operator never sees that the activity existed. The classic failure mode: a bug upstream causes tracker/exchange drift, the reconciler closes the residual without notification, and the PnL from that residual vanishes from the audit trail.
+
+Minimum bar: emit an alert ("auto-closed residual X on Y after Z; reconcile manually") whenever the reconciler takes corrective action. Full per-event accounting can follow, but the visibility layer comes first.
+
+Distinguish from the case where the reconciler merely confirms expected state (no action taken). Silence there is fine. The rule is: any corrective action requires a notification.
+
 ## Sanitize Error Messages Before Formatted Notifications
 
 When sending error messages through a formatted channel (HTML, Markdown), the error content itself may contain markup that breaks the formatter. Exchange APIs returning HTML error pages (502, 503), stack traces containing angle brackets, or user input with special characters will cause the notification to be rejected by the downstream service (e.g., Telegram rejects unparseable HTML).

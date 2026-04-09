@@ -4,6 +4,10 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 
 ---
 
+## FATB, v3.4.3 (2026-04-09)
+- UPDATED: silent-failure-prevention — added "State Transitions Must Not Wipe Fields That Other Lookups Depend On" (RC-42 Pattern 1: confirm_entry wiped trade.orders["entry"], silently disabling the v1.11.22 late-entry-fill handler for months) and "Auto-Remediation Must Notify on Success, Not Only Failure" (RC-42 Pattern 3: _reconcile_position closed 3.55 HYPE residual silently)
+- SKIPPED: delta-based idempotent fill dispatch (RC-42 Pattern 2) — specific implementation pattern, already implicitly covered by "use authoritative state, not per-event payload"
+
 ## FATB, v3.2.2 (2026-04-06)
 - UPDATED: async-safety-checklist — added rule 8 "Guard Set Entry Must Precede the First Await in the Guarded Block" (RC-39)
 - SKIPPED: duplicate metrics display (RC-40) — project-specific monitoring display behavior, not transferable
@@ -107,3 +111,6 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 
 ## FATB, v3.2.3 (2026-04-07)
 - SKIPPED: "reset polling throttle timer after fallback REST check confirms target alive" -- single occurrence, covered by existing defense-in-depth-monitoring rules (confirmation before acting on disappearances, alert deduplication).
+
+## signal-backtester, v4.6.43 (2026-04-09)
+- SKIPPED: "validate empirical presets before applying runtime sidecar overrides so stale documented stop_pct values still warn" -- already covered by existing `silent-failure-prevention` pipeline-consistency guidance; project fix was implementation of the guardrail, not a new cross-project skill category.
