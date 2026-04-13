@@ -121,3 +121,6 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 
 ## Trading Bot, v3.6.1 (2026-04-13)
 - SKIPPED: "deploy-generated sudoers file must be chowned to root after install" -- specific to this deploy script and sudo drop-in workflow; captured in PROJECT_HISTORY.md, not broad enough for a new or updated generic skill.
+
+## Trading Bot, v3.6.2 (2026-04-13)
+- SKIPPED: "scope repo-local pyright to staged Python files and preserve global pre-push extraction checks" -- repository-specific workflow fix tied to this hook layout; captured in PROJECT_HISTORY.md, not a broadly reusable new skill.
