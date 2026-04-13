@@ -136,3 +136,11 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 
 ## Trading Bot, v3.6.4 (2026-04-13)
 - SKIPPED: "fail closed when restart cannot reconstruct internal candle-close SL, and let reconcile auto-clear only from the watch loop's monitorable-trade predicate" -- tightly coupled to this bot's restart-state machine and operator workflow; the reusable principle is already captured in PROJECT_HISTORY.md without justifying a new generic skill.
+
+## FATB, v4.0.20 (2026-04-13)
+- UPDATED mock-fidelity-standards: added "Snapshot scrubbers must track nested key formats, not just top-level fields" so new generated nested keys do not break determinism tests for the wrong reason.
+- SKIPPED: startup fallback corruption visibility and fresh-install suppression -- already covered by crash-recovery-design's corruption visibility and evidence-preservation workflow.
+- SKIPPED: reconnect alert dedup by alert kind -- already covered by defense-in-depth-monitoring's alert dedup rule; project fix was a concrete instance, not a new category.
+- SKIPPED: authoritative vs degraded forced-reduction routing and residual handling -- already covered by ledger-authority-boundaries.
+- SKIPPED: accrued_fee contract pinning and removal of masking arithmetic -- already covered by masked-contract-audit.
+- SKIPPED: state-transition lookup wipe and TP1 transition-order bugs -- already covered by silent-failure-prevention.

@@ -14,7 +14,7 @@ health check, alert, missed event, duplicate alert, false trigger, price trigger
 
 Decimal, money, PnL, fee, balance, rounding, fill price, slippage, taker rate, maker rate, half-open interval, unit mismatch, stop-loss, deferred pricing, price distance, margin, leverage, escrow, lock/unlock, indicator division, div-by-zero, df.iloc, bar loop, hot loop, to_dict records -> financial-math-rules
 
-mock, fake, stub, test simulator, error fidelity, partial fill, cross-cutting failure, timing mock -> mock-fidelity-standards
+mock, fake, stub, test simulator, error fidelity, partial fill, cross-cutting failure, timing mock, snapshot determinism, snapshot scrubber, normalizer -> mock-fidelity-standards
 
 fuzz test, Hypothesis, random testing, state machine testing, invariant, event generation, simulated clock -> property-based-testing
 

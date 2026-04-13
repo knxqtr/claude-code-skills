@@ -24,6 +24,7 @@ Mocks must reproduce error behavior, not just success behavior. A lenient mock g
 4. Never globally mock timing primitives. Replacing asyncio.sleep globally makes background loops spin at infinite speed, causing 100% CPU and crashes. Scope patches to specific functions.
 5. Shared fixtures belong in conftest.py, not in test files. Pytest fixtures defined in a test file are file-scoped — other test files that request them get "fixture not found" and ERROR at setup (not FAILED), so broken tests silently appear to pass in CI if you only look at the pass/fail count. Extract to conftest.py as soon as a fixture is used by more than one file.
 6. Test data factories must use the same types as the real models. If a Pydantic model defines `extra_args: dict[str, str]`, the test helper must pass a dict, not an empty string. A factory that uses the wrong type tests a code path that production never hits.
+7. Snapshot scrubbers must track nested key formats, not just top-level fields. If a new generated identifier or timestamp-bearing key is added inside nested dicts, update the normalizer in the same change. Otherwise deterministic snapshot tests fail for the wrong reason: unstable keys, not incorrect behavior.
 
 For code examples, see references/code-examples.md in this skill's directory.
 
@@ -36,9 +37,11 @@ When writing or reviewing a mock:
 - [ ] Are timing primitives only patched in scoped contexts?
 - [ ] Is this fixture/mock used in more than one file? If so, is it in conftest.py (not a test file)?
 - [ ] Do test data factories use the same types as the real models?
+- [ ] If snapshots scrub generated IDs or timestamps, do the scrubbers cover new nested keys too?
 
 ## Common Mistakes
 
 - Mock returns a default value instead of raising on None/invalid input. Tests pass, production crashes.
 - Adding network failure simulation to some methods but not others. Tests show the system handles outages, but only for the methods you remembered.
 - Treating partial fills as full fills. Position tracking goes wrong after a partial fill because the mock removed the entire position.
+- Adding a new generated key format but only scrubbing the old top-level locations. Snapshot determinism starts flaking even though runtime behavior is unchanged.
