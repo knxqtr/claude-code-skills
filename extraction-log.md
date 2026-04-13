@@ -114,3 +114,7 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 
 ## signal-backtester, v4.6.43 (2026-04-09)
 - SKIPPED: "validate empirical presets before applying runtime sidecar overrides so stale documented stop_pct values still warn" -- already covered by existing `silent-failure-prevention` pipeline-consistency guidance; project fix was implementation of the guardrail, not a new cross-project skill category.
+
+## Trading Bot, v3.6.0 (2026-04-13)
+- SKIPPED: "async replay backtester must await shared retry helper" -- project-specific offline tooling fix; no reusable rule beyond existing async-safety and backtesting-validation skills.
+- SKIPPED: "label offline replay as approximate instead of live-equivalent" -- product/tooling scope decision, captured in PROJECT_HISTORY.md but not broad enough for a new or updated generic skill.
