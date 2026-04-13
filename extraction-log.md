@@ -124,3 +124,6 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 
 ## Trading Bot, v3.6.2 (2026-04-13)
 - SKIPPED: "scope repo-local pyright to staged Python files and preserve global pre-push extraction checks" -- repository-specific workflow fix tied to this hook layout; captured in PROJECT_HISTORY.md, not a broadly reusable new skill.
+
+## Trading Bot, v3.6.3 (2026-04-13)
+- SKIPPED: "reject implausible saved trade state during startup recovery and exclude runtime state from deploy rsync" -- strong project-specific safeguard around this bot's JSON recovery/deploy layout; the transferable parts are already covered by existing state-management and deployment-hygiene guidance, so no new generic skill is warranted.
