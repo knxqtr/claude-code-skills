@@ -4,6 +4,12 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 
 ---
 
+## FATB, v4.0.19 (2026-04-13)
+- NEW SKILL: masked-contract-audit — no existing skill covered defensive max/min or fallback arithmetic hiding one field with two meanings. Extracted from RC-98 after auditing writer/reader asymmetry around `accrued_fee`.
+- NEW SKILL: ledger-authority-boundaries — no existing skill covered canonical-vs-degraded ledger routing as a first-class design boundary. Extracted from RC-96 and RC-99 after reader-first and writer-first audits around forced-reduction close rows.
+- UPDATED: crash-recovery-design — added "Corrupt State Visibility And Evidence Preservation" from Slice B. Pattern: collect corruption during load, preserve original bytes before rewrite, and alert only after notifier readiness.
+- SKIPPED: state-transition lookup hazard — already covered by `silent-failure-prevention` section "State Transitions Must Not Wipe Fields That Other Lookups Depend On", so RC-97 refined an existing skill rather than justifying another one.
+
 ## FATB, v3.4.3 (2026-04-09)
 - UPDATED: silent-failure-prevention — added "State Transitions Must Not Wipe Fields That Other Lookups Depend On" (RC-42 Pattern 1: confirm_entry wiped trade.orders["entry"], silently disabling the v1.11.22 late-entry-fill handler for months) and "Auto-Remediation Must Notify on Success, Not Only Failure" (RC-42 Pattern 3: _reconcile_position closed 3.55 HYPE residual silently)
 - SKIPPED: delta-based idempotent fill dispatch (RC-42 Pattern 2) — specific implementation pattern, already implicitly covered by "use authoritative state, not per-event payload"

@@ -42,6 +42,19 @@ For startup/shutdown ordering details, see references/startup-shutdown.md in thi
 
 A single state file on one disk is a single point of failure. If the server dies or is redeployed, the file is gone and recovery falls to Case C with incomplete data. Back up the state file to a service the application already integrates with (e.g., a pinned message in a messaging platform, a cloud key-value store, or a config endpoint). Requirements: debounce writes to avoid rate limits, suppress backup during recovery to prevent partial state from overwriting a good backup, and restore from backup before falling through to Case C on startup.
 
+## Corrupt State Visibility And Evidence Preservation
+
+If startup can safely skip corrupt rows or malformed top-level sections, that is only half the job. The operator still needs to know startup degraded, and the original damaged bytes must survive long enough for incident analysis.
+
+Use this pattern:
+
+1. Collect corruption during load only. Record skipped row ids and malformed section names in memory.
+2. Degrade safely at the smallest honest scope. Skip one bad row if possible; degrade a malformed top-level section to an empty safe value if not.
+3. Preserve the original primary-state bytes before the first later rewrite. Write a timestamped sidecar in the same directory so tooling can find it.
+4. Emit one alert only after the notifier or UI is ready. Do not try to send alerts from deep inside the loader.
+
+Treat malformed top-level sections as a higher-severity visibility event than a single bad row, not a quieter one.
+
 ## Common Mistakes
 
 - Case C missing fields: code assumes fields exist that only Case A populates. Every code path that touches an item must work with Case C's minimal record. Populate ALL fields with defaults.
