@@ -144,3 +144,7 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 - SKIPPED: authoritative vs degraded forced-reduction routing and residual handling -- already covered by ledger-authority-boundaries.
 - SKIPPED: accrued_fee contract pinning and removal of masking arithmetic -- already covered by masked-contract-audit.
 - SKIPPED: state-transition lookup wipe and TP1 transition-order bugs -- already covered by silent-failure-prevention.
+
+## FATB, v4.0.25 (2026-04-14)
+- SKIPPED: "log pre-submit entry stage timings in journal logs for production latency diagnosis" -- observability decision for this bot's current metrics surface; reusable monitoring guidance is already covered by defense-in-depth-monitoring.
+- SKIPPED: "fix false Strategy A cleanup alerts" -- project-specific order-state behavior fix, already within order-management-edge-cases and not broad enough for a new reusable rule.
