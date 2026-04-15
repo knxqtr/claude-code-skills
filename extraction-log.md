@@ -4,6 +4,18 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 
 ---
 
+## signal-backtester, v4.7.2 (2026-04-15)
+- NEW SKILL: portfolio-monte-carlo-design — no existing skill covered multi-strategy Monte Carlo correctness rules. Extracted two transferable rules from the v4.7.2 work:
+  - Per-trade compounding in a no-timestamp portfolio simulator silently assumes instantaneous settlement and overstates the median. Monthly (or period-snapshot) compounding is the conservative bracket; per-trade is the aggressive bracket; the real answer is between them. Concurrent-position margin is why the live bot cannot match per-trade compounding even with perfect automation.
+  - Sharing one `numpy.random.Generator` across strategies makes results sensitive to YAML list order (~3% median shift on v4b WFT 1% x 4). Fix at construction: derive a Generator per unit via SHA-256 of a prefixed (seed, name) key so strategy list order cannot change the draws. Residual diffs collapse to <1 ULP of multiplication non-associativity, which is floating-point noise, not divergent sampling.
+- CHECKED: backtesting-validation — covers WFT/holdout window isolation and pipeline stage outputs, not MC simulator internals. No overlap.
+- CHECKED: property-based-testing — about Hypothesis fuzz testing, not RNG derivation or multi-strategy sampling. No overlap.
+- CHECKED: financial-math-rules — covers Decimal, fee arithmetic, rounding, bar loops. Touches MC math indirectly but does not cover the compounding-mode or RNG-sharing design choices. No overlap.
+- CHECKED: sweep-result-analysis — covers analysis of sweep/WFT/holdout CSV outputs, not MC engine design. No overlap.
+- CHECKED: portfolio-spec-sheet — a user-invocable format template for finalized portfolios, not a rules skill. No overlap.
+
+---
+
 ## FATB, v4.0.19 (2026-04-13)
 - NEW SKILL: masked-contract-audit — no existing skill covered defensive max/min or fallback arithmetic hiding one field with two meanings. Extracted from RC-98 after auditing writer/reader asymmetry around `accrued_fee`.
 - NEW SKILL: ledger-authority-boundaries — no existing skill covered canonical-vs-degraded ledger routing as a first-class design boundary. Extracted from RC-96 and RC-99 after reader-first and writer-first audits around forced-reduction close rows.

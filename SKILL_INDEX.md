@@ -30,6 +30,8 @@ walk-forward, WFT, holdout, out-of-sample, OOS, backtest stages, window isolatio
 
 sweep results, component sweep, param sweep, exit sweep, WFT results, holdout results, promotion shortlist, family ranking, plateau analysis, exit robustness, DSR, coin breadth gate, pipeline analysis -> sweep-result-analysis
 
+monte carlo, portfolio simulator, compounding, per-trade compounding, monthly compounding, empirical bootstrap, joint month-block, concurrent positions, order-invariant, RNG sharing, SeedSequence, median looks too high, conservative bracket, aggressive bracket -> portfolio-monte-carlo-design
+
 ## Maintenance
 
 When creating or updating a skill during extraction, update this index with relevant keywords.
