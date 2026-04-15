@@ -8,7 +8,6 @@ description: Extracts reusable skills from PROJECT_HISTORY.md bug catalog, lesso
 ## When to Use
 
 - Automatically when PROJECT_HISTORY.md accumulates >= 2 new extractable entries (bugs, decisions, corrections, lessons) since last extraction
-- Automatically before a git push (enforced by pre-push hook)
 - User asks to extract lessons into reusable skills
 - At version milestones
 
