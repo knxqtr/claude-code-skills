@@ -148,3 +148,11 @@ Records what was considered, kept, and skipped during each skill extraction. Rev
 ## FATB, v4.0.25 (2026-04-14)
 - SKIPPED: "log pre-submit entry stage timings in journal logs for production latency diagnosis" -- observability decision for this bot's current metrics surface; reusable monitoring guidance is already covered by defense-in-depth-monitoring.
 - SKIPPED: "fix false Strategy A cleanup alerts" -- project-specific order-state behavior fix, already within order-management-edge-cases and not broad enough for a new reusable rule.
+
+## Signal Backtester, v4.6.49 (2026-04-14)
+- SKIPPED: "DMP invalidation, ADX contract ownership, and historical artifact quarantine" -- strong repo-specific trading-system reconciliation work; the transferable principles are already covered by existing generic debugging and release-hygiene guidance, so no new reusable skill was added.
+
+## Signal Backtester, v4.7.1 (2026-04-15)
+- SKIPPED: "holdout horizon honesty and scan-all guard for empirical/theoretical preset pairs" -- project-specific preset-family release hygiene; the reusable holdout discipline is already covered by backtesting-validation.
+- SKIPPED: "empirical joint month-block bootstrap with month inheritance and union-plus-zero-fill" -- strong simulator-design decision for this repository's Monte Carlo engine, but the transferable backtest-validation principles are already covered by backtesting-validation and do not justify a new generic skill.
+- SKIPPED: "small-tier liquidity_ref tightened after live Hyperliquid spot check" -- specific to this product's hand-set friction model and venue assumptions; not broad enough for a reusable generic skill.
