@@ -138,7 +138,6 @@ Always append a Critical Rules section after Build and Test (or after Key Design
 
 - Many small files over few large files
 - High cohesion, low coupling
-- 200-400 lines typical, 800 max per file
 - Organize by feature/domain, not by type
 
 ### 2. Code Style
